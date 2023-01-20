@@ -1,3 +1,8 @@
+"""
+Created on Fri Jan 20 15:01:53 2023
+
+@author: prera
+"""
 
 from astropy.io import fits
 from glob import glob
