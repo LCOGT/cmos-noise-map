@@ -33,6 +33,11 @@ pixels = np.reshape(np.transpose(data), (dshape[2]*dshape[1], dshape[0])).tolist
 
 def get_rts(p, tol = 0.05, upper_q = 3, min_peak_sep = 10):
     """
+    Uses a Gaussian Mixture model, which is essentially a series of gaussian distributions of different means, 
+    variances, and amplitudes added together to model the clustering of data points.
+    To avoid overfitting, we go through a series of logical checks to ensure that data is being fitted properly.
+    This does NOT re-evaluate the model with every logical step, all possible fits (limited due to physics)
+    are carried through the steps.
 
     Parameters
     ----------
@@ -66,11 +71,10 @@ def get_rts(p, tol = 0.05, upper_q = 3, min_peak_sep = 10):
     """
     n_clusters=np.arange(1, 4)
     if np.std(p) > upper_q:
-        pixel = np.array(p).reshape(-1,1)
+        pixel = np.array(p).reshape(-1,1) #Need to reshape array for gmm algorithm to evaluate
         sils=[]
-        fits = []
+        fits = [] #All possible models are carried through
         for n in n_clusters:
-            #gmm=BayesianGaussianMixture(weight_concentration_prior_type="dirichlet_distribution", n_components=n, n_init = 2, covariance_type = 'full', random_state = 1).fit(pixel)
             gmm=GaussianMixture(n_components=n, n_init=2, covariance_type = 'full', random_state = 1).fit(pixel)
             sil=gmm.score(pixel)
             sils.append(sil)
@@ -80,59 +84,55 @@ def get_rts(p, tol = 0.05, upper_q = 3, min_peak_sep = 10):
         if n_components == 3 or n_components == 2:
             if np.abs(sils[-1]-sils[-2]) < tol:
                 n_components = 2
+        
         if n_components == 2:
             peaks = fits[1].means_
             variances = fits[1].covariances_
+            
+            #If peaks are separated enough, then the fit continues
             if np.abs(peaks[1]-peaks[0]) > min_peak_sep: #This is a bad criterion, change
                 peak_location=peaks
                 peak_widths=variances
                 num_peaks=len(peaks)
                 peak_distance=np.abs(peaks[1]-peaks[0])
-                #bad_idx_gmm=indices[int(pixels.index(p))]
+            
+            #If they are not well seperated, then choose to model with n=1
             elif np.abs(peaks[1]-peaks[0]) < min_peak_sep:
-                if np.std(p) > upper_q:
-                    peaks = fits[0].means_
-                    variances = fits[0].covariances_
-                    peak_location=peaks
-                    peak_widths=variances
-                    num_peaks=len(peaks)
-                    peak_distance=np.nan
-                    #bad_idx_gmm=indices[int(pixels.index(p))]
-                else:
-                    #peak_location, peak_widths, peak_distance, num_peaks, bad_idx_gmm = [np.nan, np.nan, np.nan, np.nan, np.nan]
-                    peak_location, peak_widths, peak_distance, num_peaks = [np.nan, np.nan, np.nan, np.nan]
-        elif n_components == 3:
-            peaks = fits[2].means_
-            variances = fits[2].covariances_
-            if np.abs(max(peaks)-min(peaks)) >= min_peak_sep:
-                peak_location=peaks
-                peak_widths=variances
-                num_peaks=len(peaks)
-                peak_distance=(np.abs(peaks[2]-peaks[1]), np.abs(peaks[1]-peaks[0]))
-                #bad_idx_gmm=indices[int(pixels.index(p))]
-            else:
-                if np.std(p) > upper_q:
-                    peaks = fits[0].means_
-                    variances = fits[0].covariances_
-                    peak_location=peaks
-                    peak_widths=variances
-                    num_peaks=len(peaks)
-                    peak_distance=np.nan
-                    #bad_idx_gmm=indices[int(pixels.index(p))]
-                else:
-                    peak_location, peak_widths, peak_distance, num_peaks = [np.nan, np.nan, np.nan, np.nan]
-        elif n_components == 1:
-            peaks = fits[0].means_
-            variances = fits[0].covariances_
-            if np.std(p) > upper_q:
+                peaks = fits[0].means_
+                variances = fits[0].covariances_
                 peak_location=peaks
                 peak_widths=variances
                 num_peaks=len(peaks)
                 peak_distance=np.nan
-                #bad_idx_gmm=indices[int(pixels.index(p))]
+        
+        elif n_components == 3:
+            peaks = fits[2].means_
+            variances = fits[2].covariances_
+            #If peaks are well separated, continue to model with n=3
+            if np.abs(peaks[2]-peaks[1]) >= min_peak_sep and np.abs(peaks[1]-peaks[0]) >= min_peak_sep:
+                peak_location=peaks
+                peak_widths=variances
+                num_peaks=len(peaks)
+                peak_distance=(np.abs(peaks[2]-peaks[1]), np.abs(peaks[1]-peaks[0]))
+            
+            #If peaks are not well separated try to model with n=1
             else:
-                peak_location, peak_widths, peak_distance, num_peaks = [np.nan, np.nan, np.nan, np.nan]
-        else:
-            peak_location, peak_widths, peak_distance, num_peaks = [np.nan, np.nan, np.nan, np.nan]
-        #!TODO: convert to read noise per pixel. Maybe build a separate function to do that. Or puit everything together into a class.
-        return peak_location, peak_widths, peak_distance, num_peaks
+                peaks = fits[0].means_
+                variances = fits[0].covariances_
+                peak_location=peaks
+                peak_widths=variances
+                num_peaks=len(peaks)
+                peak_distance=np.nan
+        #If n=2 and n=3 modesl are not appropriate, model with one component.
+        elif n_components == 1:
+            peaks = fits[0].means_
+            variances = fits[0].covariances_
+            peak_location=peaks
+            peak_widths=variances
+            num_peaks=len(peaks)
+            peak_distance=np.nan
+    #If pixel is not noisy, return nans to maintain data structure
+    else:
+        peak_location, peak_widths, peak_distance, num_peaks = [np.nan, np.nan, np.nan, np.nan]
+    #!TODO: convert to read noise per pixel. Maybe build a separate function to do that. Or puit everything together into a class.
+    return peak_location, peak_widths, peak_distance, num_peaks
