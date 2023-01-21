@@ -4,39 +4,42 @@ Created on Fri Jan 20 15:01:53 2023
 @author: prera
 """
 
-from astropy.io import fits
-from glob import glob
 import numpy as np
 from sklearn.mixture import GaussianMixture
 
-files = glob('/run/media/pkottapalli/Untitled/411_mod3_gain30_bin1_telegraph/*.fits', recursive = True)
-im_test = fits.open(files[0])[0].data
-data = []
-shape = np.shape(im_test)
-for t in glob('/run/media/pkottapalli/Untitled/Temp/*', recursive = True):
-    temp = np.memmap(t, dtype = im_test.dtype , mode = 'r', shape = (1,shape[1]))
-    data.append(temp)
-    del temp
+#Borrow memory mapping code from BANZAI?
+#Then read in one stacked row from data
+#Then run get_rts on all pixels in row
+#Open and write readnoise values to fits files, then write and close
+#Repeat
+#Assumes that the data is being read into the system in order.
+def data_to_pixel(data):
+    """
+    Takes data in the form of a series of opened images (of whatever shape) and
+    returns the data as a list of pixel values across images, along with data.
 
-im_test = fits.open(files[0])[0].data
-data = []
-shape = np.shape(im_test)
-for t in glob('/run/media/pkottapalli/Untitled/Temp/*', recursive = True):
-    temp = np.memmap(t, dtype = im_test.dtype , mode = 'r', shape = (1,shape[1]))
-    data.append(temp)
-    del temp
+    Parameters
+    ----------
+    data : list, shape(N images, rows, columns) #Is this true?
+        DESCRIPTION. A list of images or cutout of images
 
-dshape = np.shape(data)
-x, y = np.meshgrid(range(dshape[1]),range(dshape[2]), indexing = 'ij')
-indices = np.column_stack((x[-1].ravel(),y[-1].ravel())).tolist()
-pixels = np.reshape(np.transpose(data), (dshape[2]*dshape[1], dshape[0])).tolist()
+    Returns
+    -------
+    pixels : list of shape(1, N images)
+        DESCRIPTION. The list of pixel values across images, for all pixels given.
+
+    """
+    dshape = np.shape(data)
+    x, y = np.meshgrid(range(dshape[1]),range(dshape[2]), indexing = 'ij')
+    pixels = np.reshape(np.transpose(data), (dshape[2]*dshape[1], dshape[0])).tolist()
+    return pixels
 
 def get_rts(p, tol = 0.05, upper_q = 3, min_peak_sep = 10):
     """
     Uses a Gaussian Mixture model, which is essentially a series of gaussian distributions of different means, 
     variances, and amplitudes added together to model the clustering of data points.
     To avoid overfitting, we go through a series of logical checks to ensure that data is being fitted properly.
-    This does NOT re-evaluate the model with every logical step, all possible fits (limited due to physics)
+    This does NOT re-evaluate the model with every logical step, all possible fit_funs (constrained by physics)
     are carried through the steps.
 
     Parameters
@@ -73,12 +76,12 @@ def get_rts(p, tol = 0.05, upper_q = 3, min_peak_sep = 10):
     if np.std(p) > upper_q:
         pixel = np.array(p).reshape(-1,1) #Need to reshape array for gmm algorithm to evaluate
         sils=[]
-        fits = [] #All possible models are carried through
+        fit_funs = [] #All possible models are carried through
         for n in n_clusters:
             gmm=GaussianMixture(n_components=n, n_init=2, covariance_type = 'full', random_state = 1).fit(pixel)
             sil=gmm.score(pixel)
             sils.append(sil)
-            fits.append(gmm)
+            fit_funs.append(gmm)
         #Choose n = 2 if the scores for 2 and 3 are very close
         n_components = n_clusters[np.argmax(sils)]
         if n_components == 3 or n_components == 2:
@@ -86,53 +89,48 @@ def get_rts(p, tol = 0.05, upper_q = 3, min_peak_sep = 10):
                 n_components = 2
         
         if n_components == 2:
-            peaks = fits[1].means_
-            variances = fits[1].covariances_
+            peaks = fit_funs[1].means_
+            variances = fit_funs[1].covariances_
             
             #If peaks are separated enough, then the fit continues
             if np.abs(peaks[1]-peaks[0]) > min_peak_sep: #This is a bad criterion, change
                 peak_location=peaks
                 peak_widths=variances
                 num_peaks=len(peaks)
-                peak_distance=np.abs(peaks[1]-peaks[0])
             
             #If they are not well seperated, then choose to model with n=1
             elif np.abs(peaks[1]-peaks[0]) < min_peak_sep:
-                peaks = fits[0].means_
-                variances = fits[0].covariances_
+                peaks = fit_funs[0].means_
+                variances = fit_funs[0].covariances_
                 peak_location=peaks
                 peak_widths=variances
                 num_peaks=len(peaks)
-                peak_distance=np.nan
         
         elif n_components == 3:
-            peaks = fits[2].means_
-            variances = fits[2].covariances_
+            peaks = fit_funs[2].means_
+            variances = fit_funs[2].covariances_
             #If peaks are well separated, continue to model with n=3
             if np.abs(peaks[2]-peaks[1]) >= min_peak_sep and np.abs(peaks[1]-peaks[0]) >= min_peak_sep:
                 peak_location=peaks
                 peak_widths=variances
                 num_peaks=len(peaks)
-                peak_distance=(np.abs(peaks[2]-peaks[1]), np.abs(peaks[1]-peaks[0]))
             
             #If peaks are not well separated try to model with n=1
             else:
-                peaks = fits[0].means_
-                variances = fits[0].covariances_
+                peaks = fit_funs[0].means_
+                variances = fit_funs[0].covariances_
                 peak_location=peaks
                 peak_widths=variances
                 num_peaks=len(peaks)
-                peak_distance=np.nan
         #If n=2 and n=3 modesl are not appropriate, model with one component.
         elif n_components == 1:
-            peaks = fits[0].means_
-            variances = fits[0].covariances_
+            peaks = fit_funs[0].means_
+            variances = fit_funs[0].covariances_
             peak_location=peaks
             peak_widths=variances
             num_peaks=len(peaks)
-            peak_distance=np.nan
     #If pixel is not noisy, return nans to maintain data structure
     else:
-        peak_location, peak_widths, peak_distance, num_peaks = [np.nan, np.nan, np.nan, np.nan]
+        peak_location, peak_widths, num_peaks = [np.nan, np.nan, np.nan]
     #!TODO: convert to read noise per pixel. Maybe build a separate function to do that. Or puit everything together into a class.
-    return peak_location, peak_widths, peak_distance, num_peaks
+    return peak_location, peak_widths, num_peaks
