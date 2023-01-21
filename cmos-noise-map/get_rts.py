@@ -33,7 +33,9 @@ def data_to_pixel(data):
     x, y = np.meshgrid(range(dshape[1]),range(dshape[2]), indexing = 'ij')
     pixels = np.reshape(np.transpose(data), (dshape[2]*dshape[1], dshape[0])).tolist()
     return pixels
-
+def readnoise(means, p):
+    readnoise = 1 #https://stats.stackexchange.com/questions/16608/what-is-the-variance-of-the-weighted-mixture-of-two-gaussians
+    return readnoise
 def get_rts(p, tol = 0.05, upper_q = 3, min_peak_sep = 10):
     """
     Uses a Gaussian Mixture model, which is essentially a series of gaussian distributions of different means, 
