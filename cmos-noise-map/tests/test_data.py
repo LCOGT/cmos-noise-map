@@ -8,6 +8,7 @@ Created on Fri Jan 20 16:00:36 2023
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+from get_rts import get_rts
 
 test_data = np.zeros((5,5), dtype=object)
 # Perfect trimodal and bimodal

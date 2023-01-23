@@ -35,7 +35,7 @@ def data_to_pixel(data):
     return pixels
 
 def readnoise(means, variances, amplitudes):
-    var = np.sum(np.dot(amplitudes, variances)) + np.sum(np.dot(amplitudes, means**2)) - np.sum(np.dot(amplitudes, means))**2
+    var = np.sum(np.dot(amplitudes, variances.flatten())) + np.sum(np.dot(amplitudes, means.flatten()**2)) - np.sum(np.dot(amplitudes, means))**2
     readnoise = np.sqrt(var)
     return readnoise
 
