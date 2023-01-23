@@ -34,9 +34,10 @@ def data_to_pixel(data):
     pixels = np.reshape(np.transpose(data), (dshape[2]*dshape[1], dshape[0])).tolist()
     return pixels
 
-def readnoise(means, variances, amplitudes):
-    var = np.sum(np.dot(amplitudes, variances.flatten())) + np.sum(np.dot(amplitudes, means.flatten()**2)) - np.sum(np.dot(amplitudes, means))**2
-    readnoise = np.sqrt(var)
+def readnoise(means, variances, num_peaks, amplitudes):
+    var = [np.trace(variances[i])/num_peaks for i in range(0,num_peaks)] #Get variance from covariance
+    noise = np.sum(np.dot(amplitudes, var)) + np.sum(np.dot(amplitudes, means.flatten()**2)) - np.sum(np.dot(amplitudes, means))**2
+    readnoise = np.sqrt(noise)
     return readnoise
 
 def get_rts(p, tol = 0.05, upper_q = 3, min_peak_sep = 10):
