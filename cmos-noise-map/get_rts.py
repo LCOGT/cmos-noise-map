@@ -25,8 +25,8 @@ def data_to_pixel(data):
 
     """
     dshape = np.shape(data)
-    x, y = np.meshgrid(range(dshape[1]),range(dshape[2]), indexing = 'ij')
-    pixels = np.reshape(np.transpose(data), (dshape[2]*dshape[1], dshape[0])).tolist()
+    x, y = np.meshgrid(range(dshape[1]),range(1), indexing = 'ij')
+    pixels = np.reshape(np.transpose(data), (1*dshape[1], dshape[0]))
     return pixels
 
 def readnoise(means, variances, num_peaks, amplitudes):
@@ -99,7 +99,7 @@ def get_rts(p, tol = 0.05, upper_q = 3, min_peak_sep = 10):
     """
     n_clusters=np.arange(1, 4)
     if np.std(p) > upper_q:
-        pixel = np.array(p).reshape(-1,1) #Need to reshape array for gmm algorithm to evaluate
+        pixel = p.reshape(-1,1) #Need to reshape array for gmm algorithm to evaluate
         sils=[]
         fit_funs = [] #All possible models are carried through
         for n in n_clusters:
