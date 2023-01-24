@@ -9,7 +9,7 @@ from astropy.io import fits
 from glob import glob
 import numpy as np
 
-files = glob('/run/media/pkottapalli/Untitled/411_mod3_gain30_bin1_telegraph/*.fits', recursive = True)
+files = glob('/run/media/pkottapalli/Untitled/411_mod3_gain30_bin1_telegraph/*.fits', recursive = True) #Need at least 50
 
 def per_pixel_readnoise(p, tol = 0.05, upper_q = 3, min_peak_sep = 10):
     means, variances, num_peaks, amplitudes = get_rts(p, tol = 0.05, upper_q = 3, min_peak_sep = 10)
