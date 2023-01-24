@@ -35,12 +35,34 @@ def data_to_pixel(data):
     return pixels
 
 def readnoise(means, variances, num_peaks, amplitudes):
+    """
+    A function that takes model parameters for each pixel and converts it to a
+    single readnoise value.
+
+    Parameters
+    ----------
+    means : array of floats, shape (N, 1) where N is the number of model components
+        The means of each gaussian used to create the model.
+    variances : array of floats, shape (N, 1) where N is the number of model components
+        The covariance matrices of each gaussian used to create the model.
+    num_peaks : int
+        The optimal number of peaks found by the get_rts function
+    amplitudes : list of len(N) where N is the number of model components
+        The amplitude of each gaussian component modelled by get_rts.
+
+    Returns
+    -------
+    readnoise : float
+        The standard deviation of the pixel whose parameters are passed through, which is taken to be the read noise.
+
+    """
     if num_peaks > 1:
         var = [np.trace(variances[i])/num_peaks for i in range(0,num_peaks)] #Get variance from covariance
         noise = np.sum(np.dot(amplitudes, var)) + np.sum(np.dot(amplitudes, means.flatten()**2)) - np.sum(np.dot(amplitudes, means))**2
     else:
         var = variances
         noise = np.sum(np.dot(amplitudes, var)) + np.sum(np.dot(amplitudes, means**2)) - np.sum(np.dot(amplitudes, means))**2
+
     readnoise = np.sqrt(noise)
     return readnoise
 
