@@ -44,6 +44,8 @@ def get_rts_test(test_data):
         
     if num_peak_test == True and means_test == True:
         print('get_rts.py test passed!')
+    else:
+        print('get_rts.py test failed')
         
 get_rts_test(test_data)
              
