@@ -56,8 +56,13 @@ def readnoise(means, variances, num_peaks, amplitudes):
         The standard deviation of the pixel whose parameters are passed through, which is taken to be the read noise.
 
     """
-    var = [np.trace(variances[i])/num_peaks for i in range(0,num_peaks)] #Get variance from covariance
-    noise = np.sum(np.dot(amplitudes, var)) + np.sum(np.dot(amplitudes, means.flatten()**2)) - np.sum(np.dot(amplitudes, means))**2
+    if num_peaks > 1:
+        var = [np.trace(variances[i])/num_peaks for i in range(0,num_peaks)] #Get variance from covariance
+        noise = np.sum(np.dot(amplitudes, var)) + np.sum(np.dot(amplitudes, means.flatten()**2)) - np.sum(np.dot(amplitudes, means))**2
+    else:
+        var = variances
+        noise = np.sum(np.dot(amplitudes, var)) + np.sum(np.dot(amplitudes, means**2)) - np.sum(np.dot(amplitudes, means))**2
+
     readnoise = np.sqrt(noise)
     return readnoise
 
