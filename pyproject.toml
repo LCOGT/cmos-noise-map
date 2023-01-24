@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "cmos-noise-map"
+version = "0.1.0"
+description = "A tool to create a read noise map for CMOS detectors by modelling Random Telegraph Signal. This was originally created for use by LCOGT's BANZAI pipeline."
+authors = ["Prerana Kottapalli"]
+readme = "README.md"
+packages = [{include = "cmos_noise_map"}]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+astropy = "^5.2.1"
+sklearn = "^0.0.post1"
+numpy = "^1.24.1"
+scipy = "^1.10.0"
+glob2 = "^0.7"
+pytest = "^7.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
