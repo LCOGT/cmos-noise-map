@@ -9,6 +9,20 @@ import numpy as np
 from get_rts import get_rts, readnoise
 
 def get_rts_test(test_data):
+    """
+    Takes the test_data.npy file in the tests directory, runs the get_rts
+    function on it, and matches peak locations and number of peaks.
+
+    Parameters
+    ----------
+    test_data : float, array(any,N,N)
+        A mock pixel array, with varying amounts of samples and modality.
+
+    Returns
+    -------
+    None.
+
+    """
     means = []
     num_peaks = []
     for p in test_data.flatten():
@@ -46,6 +60,20 @@ def get_rts_test(test_data):
         print('get_rts.py test failed')
 
 def readnoise_test(test_data):
+    """
+    Takes one UNIMODAL pixel in the test_data.npy file in the tests directory, runs the readnoise
+    function on it, and compares the true and calculated standard deviations.
+
+    Parameters
+    ----------
+    test_data : float, array(any,N,N)
+        A mock pixel array, with varying amounts of samples and modality.
+
+    Returns
+    -------
+    None.
+
+    """
     #Test that variance of a unimodal distribution is still the same
     mean, variance, num_peaks, amps = get_rts(test_data[0,3])
     noise = readnoise(mean, variance, num_peaks, amps)
