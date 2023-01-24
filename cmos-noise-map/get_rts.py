@@ -7,11 +7,6 @@ Created on Fri Jan 20 15:01:53 2023
 import numpy as np
 from sklearn.mixture import GaussianMixture
 
-#Borrow memory mapping code from BANZAI?
-#Then read in one stacked row from data
-#Then run get_rts on all pixels in row
-#Open and write readnoise values to fits files, then write and close
-#Repeat
 #Assumes that the data is being read into the system in order.
 def data_to_pixel(data):
     """
