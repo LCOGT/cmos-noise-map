@@ -5,6 +5,7 @@ Created on Tue Jan 24 13:42:45 2023
 
 @author: pkottapalli
 """
+from cmos_noise_map.utils.misc_fns import qc_input
 from astropy.io import fits
 from glob import glob
 import numpy as np
@@ -17,7 +18,7 @@ def read_bias_frames(path: str, data_ext=0):
     Parameters
     ----------
     path : str
-        DESCRIPTION. The path to your fits files with the *.fits at the end to indicate which files you want to be read.
+        DESCRIPTION. The path to your fits files without the *.fits at the end
     data_ext : integer or string, optional
         DESCRIPTION. The default is 0. This is the extension to the data header data unit (hdu) that is to be processed.
 
@@ -28,18 +29,18 @@ def read_bias_frames(path: str, data_ext=0):
 
     """
     # Assumes trimmed and processed bias frames
-    files = glob(path+str('*.fits'), recursive=True)
+    files = glob(path + str("*.fits"), recursive=True)
     ims = [
         fits.open(f, memmap=True, do_not_scale_image_data=True) for f in files
     ]  # Doesn't work unless not scaled
-    # Manually scale data?
+    qc_input(ims)
     ims = np.array(ims)[:, 0]
     return ims
 
 
 def write_hdu(data, name: str):
     """
-    A function to write the data out to a fits file named ____
+    A function to write the data out to a fits file containing a read nosie map
 
     Parameters
     ----------
@@ -52,4 +53,4 @@ def write_hdu(data, name: str):
 
     """
     hdu = fits.PrimaryHDU(data)
-    hdu.writeto(name)
+    hdu.writeto(name, overwrite=True)

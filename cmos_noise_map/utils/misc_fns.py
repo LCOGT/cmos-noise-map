@@ -5,8 +5,6 @@ Created on Tue Jan 24 16:06:54 2023
 
 @author: pkottapalli
 """
-from astropy.io import fits
-from glob import glob
 import numpy as np
 
 
@@ -32,12 +30,9 @@ def data_to_pixel(data):
     pixels = np.reshape(np.transpose(data), (1 * dshape[1], dshape[0]))
     return pixels
 
-def qc_input(path, data_ext=0): #Incorporate into read_bias frames
-    files = glob(path+str('*.fits'), recursive=True)
-    num_files = len(files)
-    assert num_files>=50
-    dshape = np.shape(fits.open(files[0])[data_ext].data)
-    for f in files[1:]:
-        shape = np.shape(fits.open(f)[data_ext].data)
-        assert shape==dshape
-    
+
+def qc_input(ims, data_ext=0):  # Incorporate into read_bias frames
+    num_files = len(ims)
+    assert num_files >= 50
+    shapes = [np.shape(i) for i in ims]
+    assert len(set(shapes)) == 1

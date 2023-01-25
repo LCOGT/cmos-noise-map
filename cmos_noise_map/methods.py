@@ -11,7 +11,7 @@ from cmos_noise_map.read_write_fns import read_bias_frames
 import numpy as np
 
 # read in one row at a time, iterate over it pixel by pixel
-def do_rts(path, upper_q, data_ext=0, *args):
+def do_rts(ims, upper_q, *args):
     """
     A function wrapping all the methods to produce a full readnoise map
 
@@ -21,7 +21,7 @@ def do_rts(path, upper_q, data_ext=0, *args):
         DESCRIPTION. The path to the files to be read in
     upper_q : float
         DESCRIPTION. Upper standard deviation cutoff for noisy pixels for evaluation
-    *args : 
+    *args :
         DESCRIPTION. The arguments to be passed to get_rts
 
     Returns
@@ -30,7 +30,6 @@ def do_rts(path, upper_q, data_ext=0, *args):
         array where each element is the readnoise associated with that pixel.
 
     """
-    ims = read_bias_frames(path, data_ext)
     im_test = ims[0].data
     dshape = np.shape(im_test)
     readnoise_map = np.zeros((dshape[0], dshape[1]))
@@ -57,7 +56,7 @@ def do_rts(path, upper_q, data_ext=0, *args):
     return readnoise_map
 
 
-def do_std(path, data_ext=0):
+def do_std(ims, data_ext=0):
     """
     A function to take the standard deviation of each pixel to use as a readnoise map.
     This is a faster method than do_rts, less rigorous statistically but achieves similar answers.
@@ -73,7 +72,6 @@ def do_std(path, data_ext=0):
         array where each element is the readnoise associated with that pixel.
 
     """
-    ims = read_bias_frames(path, data_ext)
     im_test = ims[0].data
     dshape = np.shape(im_test)
     readnoise_map = np.zeros((dshape[0], dshape[1]))
@@ -88,9 +86,9 @@ def do_std(path, data_ext=0):
     return readnoise_map
 
 
-def do_rts_params(path, upper_q, data_ext=0, *args):
+def do_rts_params(ims, upper_q, *args):
     """
-        
+
 
     Parameters
     ----------
@@ -98,7 +96,7 @@ def do_rts_params(path, upper_q, data_ext=0, *args):
         DESCRIPTION. The path to the files to be read in
     upper_q : float
         DESCRIPTION. Upper standard deviation cutoff for noisy pixels for evaluation
-    *args : 
+    *args :
         DESCRIPTION. The arguments to be passed to get_rts
 
     Returns
@@ -106,9 +104,8 @@ def do_rts_params(path, upper_q, data_ext=0, *args):
     readnoise_map : array of the same shape as the input data
         array where each element is a list of associated parameters from modelling the pixel.
         It returns a nan for each parameter if a pixel does not exhibit RTS or is not noisy.
-    
+
     """
-    ims = read_bias_frames(path, data_ext)
     im_test = ims[0].data
     dshape = np.shape(im_test)
     param_map = []
