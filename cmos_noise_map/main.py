@@ -11,9 +11,10 @@ import click
 
 
 @click.command()
-@click.argument("path", nargs=1, required=True, type=click.Path(exists=True))
-@click.argument("filename", nargs=1, required=True, type=click.Path(exists=False))
+@click.argument("path", required=True, type=click.Path(exists=True))
+@click.argument("filename", required=True, type=click.Path(exists=False))
 @click.argument("method", nargs=1, default="std")
+@click.pass_context
 @click.option(
     "--data_ext",
     "-r",
@@ -39,7 +40,7 @@ import click
     type=float,
     help="Minimum difference between pixel value cluster centers to be considered separate clusters",
 )
-def cli(path: str, filename: str, data_ext, method: str, upper_q, tol, min_peak_sep):
+def cli(ctx: click.core.Context, **kwargs):
     """
     This script builds a noise map with the chosen method.
 
@@ -49,15 +50,26 @@ def cli(path: str, filename: str, data_ext, method: str, upper_q, tol, min_peak_
 
     method: Default method is std. Available methods are std, rts, and param. See docs for more information about each method.
     """
+    args_dict = ctx.params
+    path = args_dict["path"]
+    data_ext = args_dict["data_ext"]
+    method = args_dict["method"]
     ims = read_bias_frames(path, data_ext)
     if method == "std":
         readnoise_map = do_std(ims)
     elif method == "rts":
+        upper_q = args_dict["upper_q"]
+        tol = args_dict["tol"]
+        min_peak_sep = args_dict["min_peak_sep"]
         readnoise_map = do_rts(ims, upper_q, tol, min_peak_sep)
     elif method == "param":
+        upper_q = args_dict["upper_q"]
+        tol = args_dict["tol"]
+        min_peak_sep = args_dict["min_peak_sep"]
         readnoise_map = do_rts_params(ims, upper_q, tol, min_peak_sep)
     else:
         print("Please select a valid method from std, rts, or param")
+    filename = args_dict["filename"]
     write_hdu(readnoise_map, filename)
 
 
