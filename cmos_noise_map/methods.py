@@ -11,7 +11,7 @@ from read_write_fns import read_bias_frames
 import numpy as np
 
 # read in one row at a time, iterate over it pixel by pixel
-def do_rts(path, *args):
+def do_rts(path, upper_q, *args):
     ims = read_bias_frames(path)
     im_test = ims[0].data
     dshape = np.shape(im_test)
@@ -24,12 +24,14 @@ def do_rts(path, *args):
 
         # convert data to stacked pixels
         pixels = data_to_pixel(data)
-        stdimage = np.std(data, axis=0)
-        upper_q = np.quantile(stdimage, 0.8)
+        
+        if not upper_q:
+            stdimage = np.std(data, axis=0)
+            upper_q = np.quantile(stdimage, 0.8)
 
         # Append it all to a pixel map
         for i, p in enumerate(pixels):
-            noise = per_pixel_readnoise(p, upper_q)
+            noise = per_pixel_readnoise(p, upper_q, *args)
             if not np.isnan(noise):
                 readnoise_map[row_no, i] = noise
             else:
@@ -37,7 +39,7 @@ def do_rts(path, *args):
     return readnoise_map
 
 
-def do_std(path, *args):
+def do_std(path):
     ims = read_bias_frames(path)
     im_test = ims[0].data
     dshape = np.shape(im_test)
@@ -53,7 +55,7 @@ def do_std(path, *args):
     return readnoise_map
 
 
-def do_rts_params(path, *args):
+def do_rts_params(path, upper_q, *args):
     ims = read_bias_frames(path)
     im_test = ims[0].data
     dshape = np.shape(im_test)
@@ -66,8 +68,9 @@ def do_rts_params(path, *args):
 
         # convert data to stacked pixels
         pixels = data_to_pixel(data)
-        stdimage = np.std(data, axis=0)
-        upper_q = np.quantile(stdimage, 0.8)
+        if not upper_q:
+            stdimage = np.std(data, axis=0)
+            upper_q = np.quantile(stdimage, 0.8)
 
         # Append it all to a pixel map
         for i, p in enumerate(pixels):
