@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "cmos_noise_map"}]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = ">=3.8,<3.12"
 astropy = "^5.2.1"
 sklearn = "^0.0.post1"
 numpy = "^1.24.1"

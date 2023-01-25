@@ -7,29 +7,6 @@ Created on Fri Jan 20 15:01:53 2023
 import numpy as np
 from sklearn.mixture import GaussianMixture
 
-# Assumes that the data is being read into the system in order.
-def data_to_pixel(data):
-    """
-    Takes data in the form of a series of opened images (of whatever shape) and
-    returns the data as a list of pixel values across images, along with data.
-
-    Parameters
-    ----------
-    data : list, shape(N images, rows, columns) #Is this true?
-        DESCRIPTION. A list of images or cutout of images
-
-    Returns
-    -------
-    pixels : list of shape(1, N images)
-        DESCRIPTION. The list of pixel values across images, for all pixels given.
-
-    """
-    dshape = np.shape(data)
-    x, y = np.meshgrid(range(dshape[1]), range(1), indexing="ij")
-    pixels = np.reshape(np.transpose(data), (1 * dshape[1], dshape[0]))
-    return pixels
-
-
 def readnoise(means, variances, num_peaks, amplitudes):
     """
     A function that takes model parameters for each pixel and converts it to a
@@ -188,3 +165,10 @@ def get_rts(p, tol=0.05, upper_q=3, min_peak_sep=10):
         peak_location, peak_widths, num_peaks, amp = [np.nan, np.nan, np.nan, np.nan]
     #!TODO: convert to read noise per pixel. Maybe build a separate function to do that. Or puit everything together into a class.
     return peak_location, peak_widths, num_peaks, amp
+
+def per_pixel_readnoise(p, tol=0.05, upper_q=3, min_peak_sep=10):
+    means, variances, num_peaks, amplitudes = get_rts(
+        p, tol=0.05, upper_q=3, min_peak_sep=10
+    )
+    pixel_readnoise = readnoise(means, variances, num_peaks, amplitudes)
+    return pixel_readnoise
