@@ -12,6 +12,24 @@ import numpy as np
 
 # read in one row at a time, iterate over it pixel by pixel
 def do_rts(path, upper_q, *args):
+    """
+    A function wrapping all the methods to produce a full readnoise map
+
+    Parameters
+    ----------
+    path : str
+        DESCRIPTION. The path to the files to be read in
+    upper_q : float
+        DESCRIPTION. Upper standard deviation cutoff for noisy pixels for evaluation
+    *args : 
+        DESCRIPTION. The arguments to be passed to get_rts
+
+    Returns
+    -------
+    readnoise_map : array of the same shape as the input data
+        array where each element is the readnoise associated with that pixel.
+
+    """
     ims = read_bias_frames(path)
     im_test = ims[0].data
     dshape = np.shape(im_test)
@@ -40,6 +58,21 @@ def do_rts(path, upper_q, *args):
 
 
 def do_std(path):
+    """
+    A function to take the standard deviation of each pixel to use as a readnoise map.
+    This is a faster method than do_rts, less rigorous statistically but achieves similar answers.
+
+    Parameters
+    ----------
+    path : str
+        DESCRIPTION. The path to the files to be read in
+
+    Returns
+    -------
+    readnoise_map : array of the same shape as the input data
+        array where each element is the readnoise associated with that pixel.
+
+    """
     ims = read_bias_frames(path)
     im_test = ims[0].data
     dshape = np.shape(im_test)
@@ -57,6 +90,25 @@ def do_std(path):
 
 
 def do_rts_params(path, upper_q, *args):
+    """
+        
+
+    Parameters
+    ----------
+    path : str
+        DESCRIPTION. The path to the files to be read in
+    upper_q : float
+        DESCRIPTION. Upper standard deviation cutoff for noisy pixels for evaluation
+    *args : 
+        DESCRIPTION. The arguments to be passed to get_rts
+
+    Returns
+    -------
+    readnoise_map : array of the same shape as the input data
+        array where each element is a list of associated parameters from modelling the pixel.
+        It returns a nan for each parameter if a pixel does not exhibit RTS or is not noisy.
+    
+    """
     ims = read_bias_frames(path)
     im_test = ims[0].data
     dshape = np.shape(im_test)
