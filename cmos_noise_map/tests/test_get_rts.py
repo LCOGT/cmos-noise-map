@@ -9,7 +9,7 @@ import numpy as np
 from cmos_noise_map.get_rts import get_rts, readnoise
 
 
-def get_rts_test():
+def test_get_rts():
     """
     Takes the test_data.npy file in the tests directory, runs the get_rts
     function on it, and matches peak locations and number of peaks.
@@ -68,7 +68,7 @@ def get_rts_test():
     assert num_peak_test == True and means_test == True
 
 
-def readnoise_test():
+def test_readnoise():
     """
     Takes one UNIMODAL pixel in the test_data.npy file in the tests directory, runs the readnoise
     function on it, and compares the true and calculated standard deviations.

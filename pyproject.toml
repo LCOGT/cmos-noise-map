@@ -9,11 +9,11 @@ packages = [{include = "cmos_noise_map"}]
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
 astropy = "^5.2.1"
-sklearn = "^0.0.post1"
 numpy = "^1.24.1"
 scipy = "^1.10.0"
 glob2 = "^0.7"
 pytest = "^7.2.1"
+scikit-learn = "^1.2.1"
 
 
 [build-system]
