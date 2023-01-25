@@ -28,7 +28,7 @@ def read_bias_frames(path: str, data_ext=0):
 
     """
     # Assumes trimmed and processed bias frames
-    files = glob(path, recursive=True)  # Need at least 50
+    files = glob(path+str('*.fits'), recursive=True)
     ims = [
         fits.open(f, memmap=True, do_not_scale_image_data=True) for f in files
     ]  # Doesn't work unless not scaled

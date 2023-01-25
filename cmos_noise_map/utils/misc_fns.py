@@ -32,8 +32,8 @@ def data_to_pixel(data):
     pixels = np.reshape(np.transpose(data), (1 * dshape[1], dshape[0]))
     return pixels
 
-def qc_input(path, data_ext=0):
-    files = glob(path, recursive=True)
+def qc_input(path, data_ext=0): #Incorporate into read_bias frames
+    files = glob(path+str('*.fits'), recursive=True)
     num_files = len(files)
     assert num_files>=50
     dshape = np.shape(fits.open(files[0])[data_ext].data)

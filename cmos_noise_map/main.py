@@ -12,11 +12,11 @@ import click
 
 @click.command()
 @click.argument("path", nargs=1, required=True, type=click.Path(exists=True))
-@click.argument("filename", nargs=1, required=True, type=click.Path(exists=True))
+@click.argument("filename", nargs=1, required=True, type=click.Path(exists=False))
 @click.argument("method", nargs=1, default="std")
 @click.option(
     '--data_ext',
-    'r',
+    '-r',
     default=0,
     help='Extension of fits file that contains the image data'
     )
@@ -40,7 +40,7 @@ import click
     help="Minimum difference between pixel value cluster centers to be considered separate clusters",
 )
 
-def cli(path: str, filename: str, data_ext, method: str = "std", *args):
+def cli(path: str, filename: str, data_ext, method: str, upper_q, tol, min_peak_sep):
     """
     This script builds a noise map with the chosen method.
     
@@ -52,11 +52,11 @@ def cli(path: str, filename: str, data_ext, method: str = "std", *args):
     """
     qc_input(path, data_ext)
     if method == "std":
-        readnoise_map = do_std(path, data_ext, *args)
+        readnoise_map = do_std(path, data_ext)
     elif method == "rts":
-        readnoise_map = do_rts(path, data_ext, *args)
+        readnoise_map = do_rts(path, data_ext, upper_q, tol, min_peak_sep)
     elif method == "param":
-        readnoise_map = do_rts_params(path, data_ext, *args)
+        readnoise_map = do_rts_params(path, data_ext, upper_q, tol, min_peak_sep)
     else:
         print("Please select a valid method from std, rts, or param")
     write_hdu(readnoise_map, filename)

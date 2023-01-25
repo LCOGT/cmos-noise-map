@@ -85,7 +85,6 @@ def do_std(path, data_ext=0):
         # convert data to stacked pixels
         stdimage = np.std(data, axis=0)
         readnoise_map[row_no, :] = stdimage
-        print("row done")
     return readnoise_map
 
 
