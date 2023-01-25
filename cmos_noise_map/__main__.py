@@ -13,9 +13,9 @@ import click
 
 
 @click.command()
-@click.argument("path", required=True)
-@click.argument("filename", required=True)
-@click.argument("method", default="std")
+@click.argument("path", nargs=1, required=True, type=click.Path(exists=True))
+@click.argument("filename", nargs=1, required=True, type=click.Path(exists=True))
+@click.argument("method", nargs=1, default="std")
 @click.option(
     "--upper_q",
     "-uq",
@@ -36,14 +36,15 @@ import click
     help="Minimum difference between pixel value cluster centers to be considered separate clusters",
 )
 
-# path = "/run/media/pkottapalli/Untitled/411_mod3_gain30_bin1_telegraph/*.fits"
 def cli(path: str, filename: str, method: str = "std", *args) -> None:
     """
     This script builds a noise map with the chosen method.
     
-    path: path to input requires the *.fits at the end
+    path: Path to input requires the *.fits at the end
     
-    filename: path to write file, including the filename ending in .fits
+    filename: Path to write file, including the filename ending in .fits
+    
+    method: Default method is std. Available methods are std, rts, and param. See docs for more information about each method.
     """
     if method == "std":
         readnoise_map = do_std(path, *args)
