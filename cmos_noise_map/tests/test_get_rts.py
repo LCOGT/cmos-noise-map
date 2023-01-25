@@ -6,7 +6,7 @@ Created on Fri Jan 20 16:00:36 2023
 @author: pkottapalli
 """
 import numpy as np
-from get_rts import get_rts, readnoise
+from cmos_noise_map.get_rts import get_rts, readnoise
 
 
 def get_rts_test():
