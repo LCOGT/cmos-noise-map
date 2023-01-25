@@ -57,7 +57,8 @@ def test_get_rts():
     if len(true_means) == len(test_means) and num_peak_test == True:
         for i in range(len(true_means)):
             test_bools = np.isclose(
-                np.sort(true_means[i]), np.sort(test_means[i]), atol=6)  
+                np.sort(true_means[i]), np.sort(test_means[i]), atol=6
+            )
             # 6 chosen so that fake data passes tests, and because it is less than min peak separation.
             if test_bools.all() == True:
                 means_test = True

@@ -5,9 +5,9 @@ Created on Tue Jan 24 16:02:56 2023
 
 @author: pkottapalli
 """
-from get_rts import per_pixel_readnoise, get_rts
-from utils.misc_fns import data_to_pixel
-from read_write_fns import read_bias_frames
+from cmos_noise_map.get_rts import per_pixel_readnoise, get_rts
+from cmos_noise_map.utils.misc_fns import data_to_pixel
+from cmos_noise_map.read_write_fns import read_bias_frames
 import numpy as np
 
 # read in one row at a time, iterate over it pixel by pixel
@@ -24,7 +24,7 @@ def do_rts(path, upper_q, *args):
 
         # convert data to stacked pixels
         pixels = data_to_pixel(data)
-        
+
         if not upper_q:
             stdimage = np.std(data, axis=0)
             upper_q = np.quantile(stdimage, 0.8)
@@ -52,6 +52,7 @@ def do_std(path):
         # convert data to stacked pixels
         stdimage = np.std(data, axis=0)
         readnoise_map[row_no, :] = stdimage
+        print("row done")
     return readnoise_map
 
 

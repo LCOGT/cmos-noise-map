@@ -7,6 +7,7 @@ Created on Fri Jan 20 15:01:53 2023
 import numpy as np
 from sklearn.mixture import GaussianMixture
 
+
 def readnoise(means, variances, num_peaks, amplitudes):
     """
     A function that takes model parameters for each pixel and converts it to a
@@ -165,6 +166,7 @@ def get_rts(p, tol=0.05, upper_q=3, min_peak_sep=10):
         peak_location, peak_widths, num_peaks, amp = [np.nan, np.nan, np.nan, np.nan]
     #!TODO: convert to read noise per pixel. Maybe build a separate function to do that. Or puit everything together into a class.
     return peak_location, peak_widths, num_peaks, amp
+
 
 def per_pixel_readnoise(p, tol=0.05, upper_q=3, min_peak_sep=10):
     means, variances, num_peaks, amplitudes = get_rts(
