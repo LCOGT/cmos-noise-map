@@ -37,7 +37,7 @@ def read_bias_frames(path: str, data_ext=0):
     return ims
 
 
-def write_hdu(data):
+def write_hdu(data, name:str):
     """
     A function to write the data out to a fits file named ____
 
@@ -52,4 +52,4 @@ def write_hdu(data):
 
     """
     hdu = fits.PrimaryHDU(data)
-    hdu.writeto("test.fits")
+    hdu.writeto(name)
