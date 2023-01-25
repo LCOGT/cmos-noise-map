@@ -24,7 +24,7 @@ def test_get_rts():
     None.
 
     """
-    test_data = np.load("tests/test_data.npy", allow_pickle=True)
+    test_data = np.load("cmos_noise_map/tests/test_data.npy", allow_pickle=True)
     means = []
     num_peaks = []
     for p in test_data.flatten():
@@ -84,7 +84,7 @@ def test_readnoise():
 
     """
     # Test that variance of a unimodal distribution is still the same
-    test_data = np.load("tests/test_data.npy", allow_pickle=True)
+    test_data = np.load("cmos_noise_map/tests/test_data.npy", allow_pickle=True)
     mean, variance, num_peaks, amps = get_rts(test_data[0, 3])
     noise = readnoise(mean, variance, num_peaks, amps)
     true_noise = 60
