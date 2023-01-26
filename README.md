@@ -3,7 +3,7 @@ Code to model random telegraph noise in a CMOS detector. Originally designed for
 Authors: Prerana Kottapalli, Matt Daily, Curtis McCully
 
 ## Installation
-###From PyPi
+### From PyPi
 ¯\_(ツ)_/¯ Not on Pypi yet
 
 ### From Github
