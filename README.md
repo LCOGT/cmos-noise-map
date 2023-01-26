@@ -10,7 +10,7 @@ Authors: Prerana Kottapalli, Matt Daily, Curtis McCully
 To install the tool, clone this repository and run:
 
 ```
-cd pixel-mask-gen
+cd cmos-noise-map
 poetry install
 ```
 ## Tests
