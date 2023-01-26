@@ -168,9 +168,23 @@ def get_rts(p, tol=0.05, upper_q=3, min_peak_sep=10):
     return peak_location, peak_widths, num_peaks, amp
 
 
-def per_pixel_readnoise(p, tol=0.05, upper_q=3, min_peak_sep=10):
-    means, variances, num_peaks, amplitudes = get_rts(
-        p, tol=0.05, upper_q=3, min_peak_sep=10
-    )
+def per_pixel_readnoise(p, **kwargs):
+    """
+    A function wrapping get_rts and readnoise to get to the pixel readnoise
+
+    Parameters
+    ----------
+    p : list
+        DESCRIPTION. List of values of one pixel across images
+    **kwargs : 
+        Arguments to be passed to get_rts
+
+    Returns
+    -------
+    pixel_readnoise : TYPE
+        DESCRIPTION.
+
+    """
+    means, variances, num_peaks, amplitudes = get_rts(p, **kwargs)
     pixel_readnoise = readnoise(means, variances, num_peaks, amplitudes)
     return pixel_readnoise
