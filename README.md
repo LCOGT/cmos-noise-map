@@ -1,5 +1,5 @@
 # CMOS Noise Map
-Code to model random telegraph noise in a CMOS detector. Originally designed for the La Cumbres Observatory BANZAI pipeline.
+Code to model random telegraph noise in a CMOS detector. Originally designed for the Las Cumbres Observatory BANZAI pipeline.
 Authors: Prerana Kottapalli, Matt Daily, Curtis McCully
 
 ## Installation
