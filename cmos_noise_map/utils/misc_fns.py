@@ -31,7 +31,12 @@ def data_to_pixel(data):
     return pixels
 
 
-def qc_input(ims, data_ext=0):  # Incorporate into read_bias frames
+def qc_input(ims, data_ext=0):
+    """
+    Ensure that data is all the same shape, and that there are at least 50 files.
+    This is used in read_bias_frames
+
+    """
     num_files = len(ims)
     assert num_files >= 50
     shapes = [np.shape(i) for i in ims]
