@@ -15,6 +15,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Modeling Random Telegraph Signal" href="algorithm.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -34,24 +35,39 @@
   <section id="welcome-to-cmos-noise-map-s-documentation">
 <h1>Welcome to CMOS Noise Map's documentation!<a class="headerlink" href="#welcome-to-cmos-noise-map-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Modeling Random Telegraph Signal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#what-is-random-telegraph-signal">What is Random Telegraph Signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#gaussian-mixture-models">Gaussian Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#error-propagation">Error Propagation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">cmos-noise-map</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code.html#the-basic-framework">The Basic Framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#code-documentation">Code documentation</a></li>
+</ul>
+</li>
+</ul>
 </div>
-</section>
 <section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.main.cli">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.main.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#cmos_noise_map.main.cli" title="Permalink to this definition">¶</a></dt>
 <dd><p>This script builds a noise map with the chosen method.</p>
-<p>path: Path to input without the <a href="#id1"><span class="problematic" id="id2">*</span></a>.fits at the end</p>
+<p>path: Path to input without the .fits at the end</p>
 <p>filename: Path to write file, including the filename ending in .fits</p>
 <p>method: Default method is std. Available methods are std, rts, and param. See docs for more information about each method.</p>
 </dd></dl>
 
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.get_rts.get_rts">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.get_rts.</span></span><span class="sig-name descname"><span class="pre">get_rts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_peak_sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.get_rts.get_rts" title="Permalink to this definition">¶</a></dt>
@@ -88,6 +104,7 @@ the next lowest component is taken to be the model.</p></li>
 </dl>
 </dd></dl>
 
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.get_rts.readnoise">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.get_rts.</span></span><span class="sig-name descname"><span class="pre">readnoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">means</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitudes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.get_rts.readnoise" title="Permalink to this definition">¶</a></dt>
@@ -111,6 +128,7 @@ single readnoise value.</p>
 </dl>
 </dd></dl>
 
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.get_rts.per_pixel_readnoise">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.get_rts.</span></span><span class="sig-name descname"><span class="pre">per_pixel_readnoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.get_rts.per_pixel_readnoise" title="Permalink to this definition">¶</a></dt>
@@ -131,6 +149,7 @@ single readnoise value.</p>
 </dl>
 </dd></dl>
 
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.methods.do_rts">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.methods.</span></span><span class="sig-name descname"><span class="pre">do_rts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_q</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.methods.do_rts" title="Permalink to this definition">¶</a></dt>
@@ -152,6 +171,7 @@ single readnoise value.</p>
 </dl>
 </dd></dl>
 
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.methods.do_std">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.methods.</span></span><span class="sig-name descname"><span class="pre">do_std</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.methods.do_std" title="Permalink to this definition">¶</a></dt>
@@ -170,6 +190,7 @@ This is a faster method than do_rts, less rigorous statistically but achieves si
 </dl>
 </dd></dl>
 
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.methods.do_rts_params">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.methods.</span></span><span class="sig-name descname"><span class="pre">do_rts_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_q</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.methods.do_rts_params" title="Permalink to this definition">¶</a></dt>
@@ -191,6 +212,7 @@ It returns a nan for each parameter if a pixel does not exhibit RTS or is not no
 </dl>
 </dd></dl>
 
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.read_write_fns.read_bias_frames">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.read_write_fns.</span></span><span class="sig-name descname"><span class="pre">read_bias_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.read_write_fns.read_bias_frames" title="Permalink to this definition">¶</a></dt>
@@ -198,7 +220,7 @@ It returns a nan for each parameter if a pixel does not exhibit RTS or is not no
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) -- DESCRIPTION. The path to your fits files without the <a href="#id3"><span class="problematic" id="id4">*</span></a>.fits at the end</p></li>
+<li><p><strong>path</strong> (<em>str</em>) -- DESCRIPTION. The path to your fits files without the .fits at the end</p></li>
 <li><p><strong>data_ext</strong> (<em>integer</em><em> or </em><em>string</em><em>, </em><em>optional</em>) -- DESCRIPTION. The default is 0. This is the extension to the data header data unit (hdu) that is to be processed.</p></li>
 </ul>
 </dd>
@@ -211,6 +233,7 @@ It returns a nan for each parameter if a pixel does not exhibit RTS or is not no
 </dl>
 </dd></dl>
 
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.read_write_fns.write_hdu">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.read_write_fns.</span></span><span class="sig-name descname"><span class="pre">write_hdu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.read_write_fns.write_hdu" title="Permalink to this definition">¶</a></dt>
@@ -225,6 +248,7 @@ It returns a nan for each parameter if a pixel does not exhibit RTS or is not no
 </dl>
 </dd></dl>
 
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.utils.misc_fns.data_to_pixel">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.misc_fns.</span></span><span class="sig-name descname"><span class="pre">data_to_pixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.misc_fns.data_to_pixel" title="Permalink to this definition">¶</a></dt>
@@ -243,6 +267,7 @@ returns the data as a list of pixel values across images, along with data.</p>
 </dl>
 </dd></dl>
 
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.utils.misc_fns.qc_input">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.misc_fns.</span></span><span class="sig-name descname"><span class="pre">qc_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.misc_fns.qc_input" title="Permalink to this definition">¶</a></dt>
@@ -250,6 +275,7 @@ returns the data as a list of pixel values across images, along with data.</p>
 This is used in read_bias_frames</p>
 </dd></dl>
 
+</section>
 </section>
 
 
@@ -269,11 +295,17 @@ This is used in read_bias_frames</p>
 
 
 <h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Modeling Random Telegraph Signal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">cmos-noise-map</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="algorithm.html" title="next chapter">Modeling Random Telegraph Signal</a></li>
   </ul></li>
 </ul>
 </div>

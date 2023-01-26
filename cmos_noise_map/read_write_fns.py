@@ -18,7 +18,7 @@ def read_bias_frames(path: str, data_ext=0):
     Parameters
     ----------
     path : str
-        DESCRIPTION. The path to your fits files without the *.fits at the end
+        DESCRIPTION. The path to your fits files without the .fits at the end
     data_ext : integer or string, optional
         DESCRIPTION. The default is 0. This is the extension to the data header data unit (hdu) that is to be processed.
 

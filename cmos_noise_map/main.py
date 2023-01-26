@@ -44,7 +44,7 @@ def cli(ctx: click.core.Context, **kwargs):
     """
     This script builds a noise map with the chosen method.
 
-    path: Path to input without the *.fits at the end
+    path: Path to input without the .fits at the end
 
     filename: Path to write file, including the filename ending in .fits
 

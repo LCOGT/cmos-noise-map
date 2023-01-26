@@ -8,34 +8,69 @@
 ```{toctree}
 :caption: 'Contents:'
 :maxdepth: 2
+
+algorithm
+code
 ```
-# Indices and tables
+## Indices and tables
 
 - {ref}`genindex`
 - {ref}`modindex`
 - {ref}`search`
 
+<br><br>
+
 ```{eval-rst}
 .. autofunction:: cmos_noise_map.main.cli
+```
+<br><br>
 
+```{eval-rst}
 .. autofunction:: cmos_noise_map.get_rts.get_rts
+```
+<br><br>
 
+```{eval-rst}
 .. autofunction:: cmos_noise_map.get_rts.readnoise
+```
+<br><br>
 
+```{eval-rst}
 .. autofunction:: cmos_noise_map.get_rts.per_pixel_readnoise
+```
+<br><br>
 
+```{eval-rst}
 .. autofunction:: cmos_noise_map.methods.do_rts
+```
+<br><br>
 
+```{eval-rst}
 .. autofunction:: cmos_noise_map.methods.do_std
+```
+<br><br>
 
+```{eval-rst}
 .. autofunction:: cmos_noise_map.methods.do_rts_params
+```
+<br><br>
 
+```{eval-rst}
 .. autofunction:: cmos_noise_map.read_write_fns.read_bias_frames
+```
+<br><br>
 
+```{eval-rst}
 .. autofunction:: cmos_noise_map.read_write_fns.write_hdu
+```
+<br><br>
 
+```{eval-rst}
 .. autofunction:: cmos_noise_map.utils.misc_fns.data_to_pixel
+```
+<br><br>
 
+```{eval-rst}
 .. autofunction:: cmos_noise_map.utils.misc_fns.qc_input
 ```
 
