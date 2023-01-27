@@ -38,7 +38,7 @@ def read_bias_frames(path: str, data_ext=0):
     return images
 
 
-def write_hdu(data, filename: str, hduname: str = None):
+def write_hdu(data, filename: str, hduname: str = None, data_type='image'):
     """
     A function to write the data out to a fits file containing a read nosie map
 
@@ -52,5 +52,35 @@ def write_hdu(data, filename: str, hduname: str = None):
     None.
 
     """
-    hdu = fits.PrimaryHDU(data)
-    hdu.writeto(filename, overwrite=True)
+    if data_type=='image':
+        hdr = fits.Header()
+        hdr['NAME'] = hduname
+        hdu = fits.PrimaryHDU(data, header=hdr)
+        hdu.writeto(filename, overwrite=True)
+    elif data_type=='table':
+        import pandas as pd        
+        means = []
+        covariances = []
+        num_peaks = []
+        gmm_weights = []
+        for i in data:
+            means.append(i[0])
+            covariances.append(i[1])
+            num_peaks.append(i[2])
+            gmm_weights.append(i[3])
+
+        df = pd.DataFrame({'Means': means, 'Covariances': covariances, 'Number of Peaks': num_peaks, 'Mixture Weights': gmm_weights})
+        df.to_csv(filename, index=False)
+
+def read_parameter_table(csv_file):        
+    gmm_df = pd.read_csv(csv_file, header = 0)
+    peaks = [eval(elem) for elem in gmm_df['means']]
+    peak_sep = []
+    for elem in gmm_df['peak_sep']:
+        try:
+            peak_sep.append(eval(elem))
+        except TypeError:
+            peak_sep.append(np.nan)
+    var = [eval(elem) for elem in gmm_df['variances']]
+    idx_gmm = [eval(elem) for elem in gmm_df['bad_idx_gmm']]
+    num_peaks = [int(elem) for elem in gmm_df['num_peaks']]

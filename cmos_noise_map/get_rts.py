@@ -164,7 +164,6 @@ def get_rts(p, tolerance=0.05, upper_quantile=3, min_peak_separation=10):
     # If pixel is not noisy, return nans to maintain data structure
     else:
         peak_location, peak_widths, num_peaks, amp = [np.nan, np.nan, np.nan, np.nan]
-    #!TODO: convert to read noise per pixel. Maybe build a separate function to do that. Or puit everything together into a class.
     return peak_location, peak_widths, num_peaks, amp
 
 
