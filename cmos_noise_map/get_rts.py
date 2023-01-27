@@ -51,7 +51,7 @@ def readnoise(means, variances, num_peaks, amplitudes):
     return readnoise
 
 
-def get_rts(p, tol=0.05, upper_q=3, min_peak_sep=10):
+def get_rts(p, tolerance=0.05, upper_quantile=3, min_peak_separation=10):
     """
     Uses a Gaussian Mixture model, which is essentially a series of gaussian distributions of different means,
     variances, and amplitudes added together to model the clustering of data points.
@@ -88,21 +88,21 @@ def get_rts(p, tol=0.05, upper_q=3, min_peak_sep=10):
 
     """
     n_clusters = np.arange(1, 4)
-    if np.std(p) > upper_q:
+    if np.std(p) > upper_quantile:
         pixel = p.reshape(-1, 1)  # Need to reshape array for gmm algorithm to evaluate
-        sils = []
+        silhouette_scores = []
         fit_funs = []  # All possible models are carried through
         for n in n_clusters:
             gmm = GaussianMixture(
                 n_components=n, n_init=2, covariance_type="full", random_state=1
             ).fit(pixel)
-            sil = gmm.score(pixel)
-            sils.append(sil)
+            score = gmm.score(pixel)
+            silhouette_scores.append(score)
             fit_funs.append(gmm)
         # Choose n = 2 if the scores for 2 and 3 are very close
-        n_components = n_clusters[np.argmax(sils)]
+        n_components = n_clusters[np.argmax(silhouette_scores)]
         if n_components == 3 or n_components == 2:
-            if np.abs(sils[-1] - sils[-2]) < tol:
+            if np.abs(silhouette_scores[-1] - silhouette_scores[-2]) < tolerance:
                 n_components = 2
 
         if n_components == 2:
@@ -112,7 +112,7 @@ def get_rts(p, tol=0.05, upper_q=3, min_peak_sep=10):
 
             # If peaks are separated enough, then the fit continues
             if (
-                np.abs(peaks[1] - peaks[0]) > min_peak_sep
+                np.abs(peaks[1] - peaks[0]) > min_peak_separation
             ):  # This is a bad criterion, change
                 peak_location = peaks
                 peak_widths = variances
@@ -120,7 +120,7 @@ def get_rts(p, tol=0.05, upper_q=3, min_peak_sep=10):
                 amp = amplitudes
 
             # If they are not well seperated, then choose to model with n=1
-            elif np.abs(peaks[1] - peaks[0]) < min_peak_sep:
+            elif np.abs(peaks[1] - peaks[0]) < min_peak_separation:
                 peaks = fit_funs[0].means_
                 variances = fit_funs[0].covariances_
                 amplitudes = fit_funs[0].weights_
@@ -135,8 +135,8 @@ def get_rts(p, tol=0.05, upper_q=3, min_peak_sep=10):
             amplitudes = fit_funs[2].weights_
             # If peaks are well separated, continue to model with n=3
             if (
-                np.abs(peaks[2] - peaks[1]) >= min_peak_sep
-                and np.abs(peaks[1] - peaks[0]) >= min_peak_sep
+                np.abs(peaks[2] - peaks[1]) >= min_peak_separation
+                and np.abs(peaks[1] - peaks[0]) >= min_peak_separation
             ):
                 peak_location = peaks
                 peak_widths = variances

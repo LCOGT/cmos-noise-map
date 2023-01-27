@@ -25,19 +25,19 @@ def data_to_pixel(data):
         DESCRIPTION. The list of pixel values across images, for all pixels given.
 
     """
-    dshape = np.shape(data)
-    x, y = np.meshgrid(range(dshape[1]), range(1), indexing="ij")
-    pixels = np.reshape(np.transpose(data), (1 * dshape[1], dshape[0]))
+    data_shape = np.shape(data)
+    x, y = np.meshgrid(range(data_shape[1]), range(1), indexing="ij")
+    pixels = np.reshape(np.transpose(data), (1 * data_shape[1], data_shape[0]))
     return pixels
 
 
-def qc_input(ims, data_ext=0):
+def qc_input(images, data_ext=0):
     """
     Ensure that data is all the same shape, and that there are at least 50 files.
     This is used in read_bias_frames
 
     """
-    num_files = len(ims)
+    num_files = len(images)
     assert num_files >= 50
-    shapes = [np.shape(i) for i in ims]
+    shapes = [np.shape(i) for i in images]
     assert len(set(shapes)) == 1

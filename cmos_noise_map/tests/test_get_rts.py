@@ -28,7 +28,9 @@ def test_get_rts():
     means = []
     num_peaks = []
     for p in test_data.flatten():
-        mean, _, num, _ = get_rts(p, tol=0.03, upper_q=10, min_peak_sep=10)
+        mean, _, num, _ = get_rts(
+            p, tolerance=0.03, upper_quantile=10, min_peak_separation=10
+        )
         means.append(mean)
         num_peaks.append(num)
 

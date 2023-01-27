@@ -6,7 +6,7 @@ Created on Mon Jan 23 11:07:17 2023
 """
 
 from cmos_noise_map.utils.read_write_utils import read_bias_frames, write_hdu
-from cmos_noise_map.algorithms import STDMapMaker, RTSMapMaker, RTSParameterMapMaker
+from cmos_noise_map.map_maker import STDMapMaker, RTSMapMaker, RTSParameterMapMaker
 import click
 
 
@@ -31,12 +31,14 @@ import click
 @click.option(
     "--tolerance",
     "-t",
+    default=0.05,
     type=float,
     help="The minimum difference between silhouette scores. See docs for more information.",
 )
 @click.option(
     "--min_peak_separation",
     "-m",
+    default=10,
     type=float,
     help="Minimum difference between pixel value cluster centers to be considered separate clusters",
 )
@@ -64,7 +66,7 @@ def cli(ctx: click.core.Context, **kwargs):
 
     map_maker_class = methods.get(method)
     map_maker_object = map_maker_class(
-        images, upper_quantile, tolerance, min_peak_separation
+        images, tolerance, upper_quantile, min_peak_separation
     )
     readnoise_map = map_maker_object.create_map()
 

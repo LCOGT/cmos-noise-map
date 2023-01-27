@@ -30,15 +30,15 @@ def read_bias_frames(path: str, data_ext=0):
     """
     # Assumes trimmed and processed bias frames
     files = glob(path + str("*.fits"), recursive=True)
-    ims = [
+    images = [
         fits.open(f, memmap=True, do_not_scale_image_data=True) for f in files
     ]  # Doesn't work unless not scaled
-    qc_input(ims)
-    ims = np.array(ims)[:, 0]
-    return ims
+    qc_input(images)
+    images = np.array(images)[:, 0]
+    return images
 
 
-def write_hdu(data, name: str):
+def write_hdu(data, filename: str, hduname: str = None):
     """
     A function to write the data out to a fits file containing a read nosie map
 
@@ -53,4 +53,4 @@ def write_hdu(data, name: str):
 
     """
     hdu = fits.PrimaryHDU(data)
-    hdu.writeto(name, overwrite=True)
+    hdu.writeto(filename, overwrite=True)

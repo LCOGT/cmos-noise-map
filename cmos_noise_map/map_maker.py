@@ -12,7 +12,11 @@ import numpy as np
 
 class MapMaker:
     def __init__(
-        self, images, tolerance=0.05, upper_quantile=None, min_peak_seperation=10
+        self,
+        images: list,
+        tolerance: float = 0.05,
+        upper_quantile: float = None,
+        min_peak_seperation: float = 10,
     ):
         self.images = images
         self.data_shape = np.shape(images[0].data)
@@ -20,10 +24,6 @@ class MapMaker:
         self.tolerance = tolerance
         self.upper_quantile = upper_quantile
         self.min_peak_separation = min_peak_seperation
-        self.methods = {"std": "do_std", "rts": "do_rts", "param": "do_param"}
-
-    def create_map(self):
-        pass
 
 
 class STDMapMaker(MapMaker):
@@ -59,22 +59,13 @@ class RTSMapMaker(MapMaker):
         """
         A function wrapping all the methods to produce a full readnoise map
 
-        Parameters
-        ----------
-        path : str
-            DESCRIPTION. The path to the files to be read in
-        upper_q : float
-            DESCRIPTION. Upper standard deviation cutoff for noisy pixels for evaluation
-        *args :
-            DESCRIPTION. The arguments to be passed to get_rts
-
         Returns
         -------
-        readnoise_map : array of the same shape as the input data
-            array where each element is the readnoise associated with that pixel.
+        TYPE
+            DESCRIPTION.
 
         """
-        for row_no in range(0, self.data_shape[0]):
+        for row_no in range(0, 1):  # self.data_shape[0]):
             data = []
             for im in self.images:
                 data.append(im.data[row_no, :] + 32768)
@@ -90,9 +81,9 @@ class RTSMapMaker(MapMaker):
             for i, p in enumerate(pixels):
                 noise = per_pixel_readnoise(
                     p,
-                    tol=self.tolerance,
-                    upper_q=self.upper_quantile,
-                    min_peak_sep=self.min_peak_separation,
+                    tolerance=self.tolerance,
+                    upper_quantile=self.upper_quantile,
+                    min_peak_separation=self.min_peak_separation,
                 )
                 if not np.isnan(noise):
                     self.map[row_no, i] = noise
@@ -123,7 +114,7 @@ class RTSParameterMapMaker(MapMaker):
 
         """
         param_map = []
-        for row_no in range(0, self.data_shape[0]):
+        for row_no in range(0, 1):  # self.data_shape[0]):
             data = []
             for im in self.images:
                 data.append(im.data[row_no, :] + 32768)
@@ -139,9 +130,9 @@ class RTSParameterMapMaker(MapMaker):
             for i, p in enumerate(pixels):
                 params = get_rts(
                     p,
-                    tol=self.tolerance,
-                    upper_q=self.upper_quantile,
-                    min_peak_sep=self.min_peak_separation,
+                    tolerance=self.tolerance,
+                    upper_quantile=self.upper_quantile,
+                    min_peak_separation=self.min_peak_separation,
                 )
                 param_map.append(params)
         return param_map
