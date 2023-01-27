@@ -5,8 +5,8 @@ Created on Mon Jan 23 11:07:17 2023
 @author: prera
 """
 
-from cmos_noise_map.read_write_fns import read_bias_frames, write_hdu
-from cmos_noise_map.methods import do_rts, do_std, do_rts_params
+from cmos_noise_map.utils.read_write_utils import read_bias_frames, write_hdu
+from cmos_noise_map.algorithms import STDMapMaker, RTSMapMaker, RTSParameterMapMaker
 import click
 
 
@@ -22,20 +22,20 @@ import click
     help="Extension of fits file that contains the image data",
 )
 @click.option(
-    "--upper_q",
+    "--upper_quantile",
     "-uq",
     default=None,
     type=float,
     help="Standard deviation cutoff for pixel noise evaluation",
 )
 @click.option(
-    "--tol",
+    "--tolerance",
     "-t",
     type=float,
     help="The minimum difference between silhouette scores. See docs for more information.",
 )
 @click.option(
-    "--min_peak_sep",
+    "--min_peak_separation",
     "-m",
     type=float,
     help="Minimum difference between pixel value cluster centers to be considered separate clusters",
@@ -51,24 +51,23 @@ def cli(ctx: click.core.Context, **kwargs):
     method: Default method is std. Available methods are std, rts, and param. See docs for more information about each method.
     """
     args_dict = ctx.params
+
     path = args_dict["path"]
     data_ext = args_dict["data_ext"]
     method = args_dict["method"]
-    ims = read_bias_frames(path, data_ext)
-    if method == "std":
-        readnoise_map = do_std(ims)
-    elif method == "rts":
-        upper_q = args_dict["upper_q"]
-        tol = args_dict["tol"]
-        min_peak_sep = args_dict["min_peak_sep"]
-        readnoise_map = do_rts(ims, upper_q, tol, min_peak_sep)
-    elif method == "param":
-        upper_q = args_dict["upper_q"]
-        tol = args_dict["tol"]
-        min_peak_sep = args_dict["min_peak_sep"]
-        readnoise_map = do_rts_params(ims, upper_q, tol, min_peak_sep)
-    else:
-        print("Please select a valid method from std, rts, or param")
+    upper_quantile = args_dict["upper_quantile"]
+    tolerance = args_dict["tolerance"]
+    min_peak_separation = args_dict["min_peak_separation"]
+
+    images = read_bias_frames(path, data_ext)
+    methods = {"std": STDMapMaker, "rts": RTSMapMaker, "param": RTSParameterMapMaker}
+
+    map_maker_class = methods.get(method)
+    map_maker_object = map_maker_class(
+        images, upper_quantile, tolerance, min_peak_separation
+    )
+    readnoise_map = map_maker_object.create_map()
+
     filename = args_dict["filename"]
     write_hdu(readnoise_map, filename)
 

@@ -176,7 +176,7 @@ def per_pixel_readnoise(p, **kwargs):
     ----------
     p : list
         DESCRIPTION. List of values of one pixel across images
-    **kwargs : 
+    **kwargs :
         Arguments to be passed to get_rts
 
     Returns
