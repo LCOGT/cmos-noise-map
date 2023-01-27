@@ -80,7 +80,7 @@ def get_rts(p, tol=0.05, upper_q=3, min_peak_sep=10):
     peak_location : TYPE: list(float), length = num_peaks
         DESCRIPTION: The means of each of the Gaussian modes calculated by GMM
     peak_widths : TYPE: list(float), length = num_peaks
-        DESCRIPTION: The standard deviations of each Gaussian mode calculated by GMM
+        DESCRIPTION: The covariance of each Gaussian mode calculated by GMM
     num_peaks : TYPE: int
         DESCRIPTION: The number of Gaussians used to model the distribution of values of the pixel
     amp : TYPE: list(float)

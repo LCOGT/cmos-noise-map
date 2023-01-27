@@ -13,10 +13,11 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="cmos-noise-map" href="code.html" />
-    <link rel="prev" title="Welcome to CMOS Noise Map&#39;s documentation!" href="index.html" />
+    <link rel="prev" title="CMOS Noise Map documentation" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -36,13 +37,75 @@
   <section id="modeling-random-telegraph-signal">
 <h1>Modeling Random Telegraph Signal<a class="headerlink" href="#modeling-random-telegraph-signal" title="Permalink to this headline">¶</a></h1>
 <section id="what-is-random-telegraph-signal">
-<h2>What is Random Telegraph Signal<a class="headerlink" href="#what-is-random-telegraph-signal" title="Permalink to this headline">¶</a></h2>
+<h2>What is Random Telegraph Signal?<a class="headerlink" href="#what-is-random-telegraph-signal" title="Permalink to this headline">¶</a></h2>
+<p>Random Telegraph Signal is the result of a randomly occurring jumps between discrete voltage levels, whose source is the Metal-Oxide Semiconductor Field Effect Transistor (MOSFET) in each pixel in a CMOS sensor.
+RTS shows up in bias frames, and any other time where the incoming signal is very low. This is because the temporal signal or light signal is usually dominant over RTS, which can have a read noise anywhere about 20e- and above.
+Due to correlated double sampling, where the read out value of a pixel is taken as the difference between the activated pixel voltage and the reset voltage, we see a multi-modal distribution of data points:</p>
+<img alt="&quot;Data variation of an RTS affected pixel, showing three different modes of clustering&quot;" src="_images/pixel_variation.png" />
+<p>When we take a look at this in histogram form, we can clearly see the trimodal behaviour:</p>
+<img alt="&quot;A histogram of the RTS affected pixel, showing a trimodal distribution&quot;" src="_images/RTS-trimodal.png" />
+<p>We want to investigate all of the pixels so that we can find out more about Random Telegraph Signal behavior.</p>
 </section>
-<section id="gaussian-mixture-models">
-<h2>Gaussian Mixture Models<a class="headerlink" href="#gaussian-mixture-models" title="Permalink to this headline">¶</a></h2>
+<section id="gaussian-mixture-models-and-rts-properties">
+<h2>Gaussian Mixture Models and RTS Properties<a class="headerlink" href="#gaussian-mixture-models-and-rts-properties" title="Permalink to this headline">¶</a></h2>
+<p>As we plotted histograms for the pixels on a detector, we found unimodal, bimodal, and trimodal pixel noise distributions. Our end goal was to parametrize the noise by finding the peak locations and variances for each peak present.
+After some trial and error with Maximum Likelihood fitting and Kernel Density Estimation on the histograms, Gaussian Mixture Modelling seemed to be the best option to non-parametrically model the data (not the histogram representation of it).</p>
+<section id="gaussian-mixture-model-basics">
+<h3>Gaussian Mixture Model Basics<a class="headerlink" href="#gaussian-mixture-model-basics" title="Permalink to this headline">¶</a></h3>
+<p>Gaussian Mixture Modelling is a parametric probability density function represented as a weighted sum of Gaussian component densities. It attempts to represent the data as a sum of weighted gaussians with unique means, and covariances:</p>
+<div class="math notranslate nohighlight">
+\[p( \textbf{x}| \lambda ) = \sum_{i=1}^{M} w_{i} g(\textbf{x}| \mu_{i} \Sigma_{i} )\]</div>
+<p>After determining the number of components in the data, the parameters are estimated from the data by the iterative Expectation-Maximization algorithm.
+We use sklearn to implement this modelling method in our code.</p>
+<p>A difficult part of this implementation is determining the number of components needed to model the data. This changes for each pixel, so we wanted an automated way to determine this,
+without overfitting.</p>
+<p>The primary method we use to do this is a silhouette score. This is calculated by the GMM class provided by sklearn, and is a simple calculation.
+<br>
+For a given sample, the likelihood that it belings to a cluster is determined by:</p>
+<div class="math notranslate nohighlight">
+\[s = \frac{b-a}{max(a,b)}\]</div>
+<img alt="&quot;A visual representation of a silhouette score, a represents intra-cluster distance from the sample, and b is the inter-cluster distance.&quot;" src="https://miro.medium.com/max/712/1*cUcY9jSBHFMqCmX-fp8BvQ.jpeg" />
+<p>Where, <em>a</em> represents intra-cluster distance from the sample, and <em>b</em> is the inter-cluster distance.</p>
+<p>Then to avoid overfitting, we go through a series of checks illustrated below:</p>
+<img alt="&quot;A flowchart depciting the checks made to ensure the right number of components are fitted to the data. THe checks include ones of peak separation, and silhouette scores.&quot;" src="_images/cmos-flowchart.png" />
+<p>At the end, we get parameters describing the data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">peak_location</span> <span class="p">:</span> <span class="n">TYPE</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span> <span class="n">length</span> <span class="o">=</span> <span class="n">num_peaks</span>
+    <span class="n">DESCRIPTION</span><span class="p">:</span> <span class="n">The</span> <span class="n">means</span> <span class="n">of</span> <span class="n">each</span> <span class="n">of</span> <span class="n">the</span> <span class="n">Gaussian</span> <span class="n">modes</span> <span class="n">calculated</span> <span class="n">by</span> <span class="n">GMM</span>
+<span class="n">peak_widths</span> <span class="p">:</span> <span class="n">TYPE</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">float</span><span class="p">),</span> <span class="n">length</span> <span class="o">=</span> <span class="n">num_peaks</span>
+    <span class="n">DESCRIPTION</span><span class="p">:</span> <span class="n">The</span> <span class="n">covariance</span> <span class="n">of</span> <span class="n">each</span> <span class="n">Gaussian</span> <span class="n">mode</span> <span class="n">calculated</span> <span class="n">by</span> <span class="n">GMM</span>
+<span class="n">num_peaks</span> <span class="p">:</span> <span class="n">TYPE</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">DESCRIPTION</span><span class="p">:</span> <span class="n">The</span> <span class="n">number</span> <span class="n">of</span> <span class="n">Gaussians</span> <span class="n">used</span> <span class="n">to</span> <span class="n">model</span> <span class="n">the</span> <span class="n">distribution</span> <span class="n">of</span> <span class="n">values</span> <span class="n">of</span> <span class="n">the</span> <span class="n">pixel</span>
+<span class="n">amp</span> <span class="p">:</span> <span class="n">TYPE</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">DESCRIPTION</span><span class="p">:</span> <span class="n">The</span> <span class="n">weights</span> <span class="n">of</span> <span class="n">each</span> <span class="n">gaussian</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">mixture</span><span class="o">.</span> <span class="n">All</span> <span class="n">weights</span> <span class="nb">sum</span> <span class="n">to</span> <span class="mf">1.</span>
+</pre></div>
+</div>
+<br>
+<img alt="&quot;The model, histogram, and data of an RTS affected pixel with three modes.&quot;" src="_images/Trimodal.png" />
+<img alt="&quot;The model, histogram, and data of an RTS affected pixel with two modes.&quot;" src="_images/bimodal.png" />
+</section>
+<section id="rts-properties">
+<h3>RTS Properties<a class="headerlink" href="#rts-properties" title="Permalink to this headline">¶</a></h3>
+<p>After modelling a subset of test data (200 bias frames taken with a QHY411 CMOS camera), we can investigate the properties of the pixels affected by telegraph noise.
+In doing so, we find the following:</p>
+<ul class="simple">
+<li><p>7.8% of pixels are multimodal.</p></li>
+<li><p>The locations are consistent.</p></li>
+<li><p>Majority of pixels are trimodal; though unexpectedly, a small number of pixels have a bimodal distribution.</p></li>
+<li><p>When run on all pixels in a 500x500 pixel grid, 12% of pixels are affected</p></li>
+<li><p>73% of RTS pixels neighbor another RTS pixel.</p></li>
+</ul>
+</section>
 </section>
 <section id="error-propagation">
 <h2>Error Propagation<a class="headerlink" href="#error-propagation" title="Permalink to this headline">¶</a></h2>
+<p>With the means, amplitudes, and covariances of individual gaussians we can follow standard error propagation methods to calculate the read noise of each pixel. This is possible because our model essentially models the probability distribution function of the data.</p>
+<p>To get from covariance to a variance of each of our 1D gaussians:</p>
+<div class="math notranslate nohighlight">
+\[\sigma_{i}^{2} = Tr(\Sigma_i)\]</div>
+<p>And then for multiple components, we can propagate the parameters to get a single read nosie for a pixel.</p>
+<div class="math notranslate nohighlight">
+\[\sigma^2 = \sum_{i} w_{i} \sigma_{i}^{2} + \sum_{i} w_{i} \left( \mu_{i} \right)^{2} - \left( \sum_{i} w_{i} \mu_{i} \right)^2\]</div>
+<p>where the read noise is the square root of sigma.</p>
 </section>
 </section>
 
@@ -66,8 +129,8 @@
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Modeling Random Telegraph Signal</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#what-is-random-telegraph-signal">What is Random Telegraph Signal</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#gaussian-mixture-models">Gaussian Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-random-telegraph-signal">What is Random Telegraph Signal?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gaussian-mixture-models-and-rts-properties">Gaussian Mixture Models and RTS Properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#error-propagation">Error Propagation</a></li>
 </ul>
 </li>
@@ -78,7 +141,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to CMOS Noise Map's documentation!</a></li>
+      <li>Previous: <a href="index.html" title="previous chapter">CMOS Noise Map documentation</a></li>
       <li>Next: <a href="code.html" title="next chapter">cmos-noise-map</a></li>
   </ul></li>
 </ul>

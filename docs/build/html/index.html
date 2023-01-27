@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Welcome to CMOS Noise Map&#39;s documentation! &#8212; CMOS Noise Map 0.1.0 documentation</title>
+    <title>CMOS Noise Map documentation &#8212; CMOS Noise Map 0.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -32,14 +32,14 @@
 
           <div class="body" role="main">
             
-  <section id="welcome-to-cmos-noise-map-s-documentation">
-<h1>Welcome to CMOS Noise Map's documentation!<a class="headerlink" href="#welcome-to-cmos-noise-map-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <section id="cmos-noise-map-documentation">
+<h1>CMOS Noise Map documentation<a class="headerlink" href="#cmos-noise-map-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="algorithm.html">Modeling Random Telegraph Signal</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="algorithm.html#what-is-random-telegraph-signal">What is Random Telegraph Signal</a></li>
-<li class="toctree-l2"><a class="reference internal" href="algorithm.html#gaussian-mixture-models">Gaussian Mixture Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#what-is-random-telegraph-signal">What is Random Telegraph Signal?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#gaussian-mixture-models-and-rts-properties">Gaussian Mixture Models and RTS Properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithm.html#error-propagation">Error Propagation</a></li>
 </ul>
 </li>
@@ -57,224 +57,15 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.main.cli">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.main.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#cmos_noise_map.main.cli" title="Permalink to this definition">¶</a></dt>
-<dd><p>This script builds a noise map with the chosen method.</p>
-<p>path: Path to input without the .fits at the end</p>
-<p>filename: Path to write file, including the filename ending in .fits</p>
-<p>method: Default method is std. Available methods are std, rts, and param. See docs for more information about each method.</p>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.get_rts.get_rts">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.get_rts.</span></span><span class="sig-name descname"><span class="pre">get_rts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_peak_sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.get_rts.get_rts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Uses a Gaussian Mixture model, which is essentially a series of gaussian distributions of different means,
-variances, and amplitudes added together to model the clustering of data points.
-To avoid overfitting, we go through a series of logical checks to ensure that data is being fitted properly.
-This does NOT re-evaluate the model with every logical step, all possible fit_funs (constrained by physics)
-are carried through the steps.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> (<em>TYPE: list</em>) -- DESCRIPTION: List of pixel values across a set of bias frames</p></li>
-<li><p><strong>tol</strong> (<em>TYPE: float</em>) -- <dl class="simple">
-<dt>DESCRIPTION: The minimum difference between silhouette scores (likelihood of the model being correct)</dt><dd><p>between n_components=2 and 3. If there is a plateau (i.e. not much improvement between n=2 and n=3)
-then the number of components chosen for the fit is 2. Not recommended to change unless you have
-looked at the scores yourself.</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>upper_q</strong> (<em>TYPE: float</em>) -- DESCRIPTION: The upper standard deviation cutoff of pixels to be evaluated for telegraph noise.</p></li>
-<li><p><strong>min_peak_sep</strong> (<em>TYPE: float</em>) -- DESCRIPTION: The minimum separation of peaks for them to be considered separate peaks. If they are too close,
-the next lowest component is taken to be the model.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>peak_location</strong> (<em>TYPE: list(float), length = num_peaks</em>) -- DESCRIPTION: The means of each of the Gaussian modes calculated by GMM</p></li>
-<li><p><strong>peak_widths</strong> (<em>TYPE: list(float), length = num_peaks</em>) -- DESCRIPTION: The standard deviations of each Gaussian mode calculated by GMM</p></li>
-<li><p><strong>num_peaks</strong> (<em>TYPE: int</em>) -- DESCRIPTION: The number of Gaussians used to model the distribution of values of the pixel</p></li>
-<li><p><strong>amp</strong> (<em>TYPE: list(float)</em>) -- DESCRIPTION: The weights of each gaussian in the mixture. All weights sum to 1.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.get_rts.readnoise">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.get_rts.</span></span><span class="sig-name descname"><span class="pre">readnoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">means</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitudes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.get_rts.readnoise" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function that takes model parameters for each pixel and converts it to a
-single readnoise value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>means</strong> (<em>array of floats</em><em>, </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>1</em><em>) </em><em>where N is the number of model components</em>) -- The means of each gaussian used to create the model.</p></li>
-<li><p><strong>variances</strong> (<em>array of floats</em><em>, </em><em>shape</em><em> (</em><em>N</em><em>, </em><em>1</em><em>) </em><em>where N is the number of model components</em>) -- The covariance matrices of each gaussian used to create the model.</p></li>
-<li><p><strong>num_peaks</strong> (<em>int</em>) -- The optimal number of peaks found by the get_rts function</p></li>
-<li><p><strong>amplitudes</strong> (<em>list of len</em><em>(</em><em>N</em><em>) </em><em>where N is the number of model components</em>) -- The amplitude of each gaussian component modelled by get_rts.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>readnoise</strong> -- The standard deviation of the pixel whose parameters are passed through, which is taken to be the read noise.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.get_rts.per_pixel_readnoise">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.get_rts.</span></span><span class="sig-name descname"><span class="pre">per_pixel_readnoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.get_rts.per_pixel_readnoise" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function wrapping get_rts and readnoise to get to the pixel readnoise</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> (<em>list</em>) -- DESCRIPTION. List of values of one pixel across images</p></li>
-<li><p><strong>**kwargs</strong> -- Arguments to be passed to get_rts</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>pixel_readnoise</strong> -- DESCRIPTION.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>TYPE</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.methods.do_rts">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.methods.</span></span><span class="sig-name descname"><span class="pre">do_rts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_q</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.methods.do_rts" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function wrapping all the methods to produce a full readnoise map</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) -- DESCRIPTION. The path to the files to be read in</p></li>
-<li><p><strong>upper_q</strong> (<em>float</em>) -- DESCRIPTION. Upper standard deviation cutoff for noisy pixels for evaluation</p></li>
-<li><p><strong>*args</strong> -- DESCRIPTION. The arguments to be passed to get_rts</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>readnoise_map</strong> -- array where each element is the readnoise associated with that pixel.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>array of the same shape as the input data</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.methods.do_std">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.methods.</span></span><span class="sig-name descname"><span class="pre">do_std</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.methods.do_std" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function to take the standard deviation of each pixel to use as a readnoise map.
-This is a faster method than do_rts, less rigorous statistically but achieves similar answers.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) -- DESCRIPTION. The path to the files to be read in</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>readnoise_map</strong> -- array where each element is the readnoise associated with that pixel.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>array of the same shape as the input data</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.methods.do_rts_params">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.methods.</span></span><span class="sig-name descname"><span class="pre">do_rts_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_q</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.methods.do_rts_params" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) -- DESCRIPTION. The path to the files to be read in</p></li>
-<li><p><strong>upper_q</strong> (<em>float</em>) -- DESCRIPTION. Upper standard deviation cutoff for noisy pixels for evaluation</p></li>
-<li><p><strong>*args</strong> -- DESCRIPTION. The arguments to be passed to get_rts</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>readnoise_map</strong> -- array where each element is a list of associated parameters from modelling the pixel.
-It returns a nan for each parameter if a pixel does not exhibit RTS or is not noisy.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>array of the same shape as the input data</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.read_write_fns.read_bias_frames">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.read_write_fns.</span></span><span class="sig-name descname"><span class="pre">read_bias_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.read_write_fns.read_bias_frames" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function to open up fits files with memory mapping.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) -- DESCRIPTION. The path to your fits files without the .fits at the end</p></li>
-<li><p><strong>data_ext</strong> (<em>integer</em><em> or </em><em>string</em><em>, </em><em>optional</em>) -- DESCRIPTION. The default is 0. This is the extension to the data header data unit (hdu) that is to be processed.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>ims</strong> -- DESCRIPTION. And array of opened, memory mapped, fits hdus. Not the data itself.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>array</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.read_write_fns.write_hdu">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.read_write_fns.</span></span><span class="sig-name descname"><span class="pre">write_hdu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.read_write_fns.write_hdu" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function to write the data out to a fits file containing a read nosie map</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>NxN array of floats</em>) -- DESCRIPTION. The data to be written out into the fits file. This is where the readnoise map goes.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.utils.misc_fns.data_to_pixel">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.misc_fns.</span></span><span class="sig-name descname"><span class="pre">data_to_pixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.misc_fns.data_to_pixel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes data in the form of a series of opened images (of whatever shape) and
-returns the data as a list of pixel values across images, along with data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>list</em><em>, </em><em>shape</em><em>(</em><em>N images</em><em>, </em><em>rows</em><em>, </em><em>columns</em><em>) </em><em>#Is this true?</em>) -- DESCRIPTION. A list of images or cutout of images</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>pixels</strong> -- DESCRIPTION. The list of pixel values across images, for all pixels given.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of shape(1, N images)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.utils.misc_fns.qc_input">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.misc_fns.</span></span><span class="sig-name descname"><span class="pre">qc_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.misc_fns.qc_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ensure that data is all the same shape, and that there are at least 50 files.
-This is used in read_bias_frames</p>
-</dd></dl>
-
+</section>
+<section id="about-this-project">
+<h2>About this project<a class="headerlink" href="#about-this-project" title="Permalink to this headline">¶</a></h2>
+<p>This project was started in 2022, as the Las Cumbres Observatory Delta Rho upgrades were underway. We investigated the properties of random telegraph signal, which are further discussed in <a class="reference internal" href="algorithm.html"><span class="doc std std-doc">The Algorithm Section</span></a>,
+and pondered how to deal with it in the new QHY600 cameras being installed at various LCO 0.4m telescopes. We decided to propagate noise as a 2D error map, similar to the <a class="reference external" href="https://github.com/LCOGT/pixel-mask-gen">bad pixel map maker</a>.
+This document has information about why we chose to address the problem of RTS in the way that we did, documents the code, and contains suggestions for future directions and improvements on this work.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 </section>
 </section>
 
