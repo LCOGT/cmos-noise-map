@@ -42,6 +42,13 @@ import click
     type=float,
     help="Minimum difference between pixel value cluster centers to be considered separate clusters",
 )
+@click.option(
+    "--out_hdu_name",
+    "-o",
+    default=None,
+    type=str,
+    help="Name for the header in which the data will be stored",
+)
 def cli(ctx: click.core.Context, **kwargs):
     """
     This script builds a noise map with the chosen method.
@@ -69,9 +76,11 @@ def cli(ctx: click.core.Context, **kwargs):
         images, tolerance, upper_quantile, min_peak_separation
     )
     readnoise_map = map_maker_object.create_map()
-
+    
+    data_types = {"std": 'image', "rts": 'image', "param": 'table'}
     filename = args_dict["filename"]
-    write_hdu(readnoise_map, filename)
+    hdu_name = args_dict['out_hdu_name']
+    write_hdu(readnoise_map, filename, hdu_name, data_types[method])
 
 
 if __name__ == "__main__":

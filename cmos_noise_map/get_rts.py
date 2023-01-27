@@ -30,6 +30,7 @@ def readnoise(means, variances, num_peaks, amplitudes):
         The standard deviation of the pixel whose parameters are passed through, which is taken to be the read noise.
 
     """
+    print(means, variances, num_peaks, amplitudes)
     if num_peaks > 1:
         var = [
             np.trace(variances[i]) / num_peaks for i in range(0, num_peaks)

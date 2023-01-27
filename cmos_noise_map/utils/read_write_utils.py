@@ -10,6 +10,7 @@ from astropy.io import fits
 from glob import glob
 import numpy as np
 
+import pandas as pd
 
 def read_bias_frames(path: str, data_ext=0):
     """
@@ -57,8 +58,7 @@ def write_hdu(data, filename: str, hduname: str = None, data_type='image'):
         hdr['NAME'] = hduname
         hdu = fits.PrimaryHDU(data, header=hdr)
         hdu.writeto(filename, overwrite=True)
-    elif data_type=='table':
-        import pandas as pd        
+    elif data_type=='table':       
         means = []
         covariances = []
         num_peaks = []
@@ -71,16 +71,33 @@ def write_hdu(data, filename: str, hduname: str = None, data_type='image'):
 
         df = pd.DataFrame({'Means': means, 'Covariances': covariances, 'Number of Peaks': num_peaks, 'Mixture Weights': gmm_weights})
         df.to_csv(filename, index=False)
+    else:
+        pass
 
-def read_parameter_table(csv_file):        
+def read_parameter_table(csv_file):
+    """
+    A utility function to read in a parameter map
+
+    Parameters
+    ----------
+    csv_file : .csv file
+        The csv file containing the parameter data output.
+
+    Returns
+    -------
+    means : TYPE: list(float), length = num_peaks
+        DESCRIPTION: The means of each of the Gaussian modes calculated by GMM
+    var : TYPE: list(float), length = num_peaks
+        DESCRIPTION: The covariance of each Gaussian mode calculated by GMM
+    num_peaks : TYPE: int
+        DESCRIPTION: The number of Gaussians used to model the distribution of values of the pixel
+    amps : TYPE: list(float)
+        DESCRIPTION: The weights of each gaussian in the mixture. All weights sum to 1.
+
+    """
     gmm_df = pd.read_csv(csv_file, header = 0)
-    peaks = [eval(elem) for elem in gmm_df['means']]
-    peak_sep = []
-    for elem in gmm_df['peak_sep']:
-        try:
-            peak_sep.append(eval(elem))
-        except TypeError:
-            peak_sep.append(np.nan)
-    var = [eval(elem) for elem in gmm_df['variances']]
-    idx_gmm = [eval(elem) for elem in gmm_df['bad_idx_gmm']]
-    num_peaks = [int(elem) for elem in gmm_df['num_peaks']]
+    means = gmm_df['Means']
+    var = gmm_df['Covariances']
+    num_peaks = gmm_df['Number of Peaks']
+    amps = gmm_df['Mixture Weights']
+    return means, var, num_peaks, amps
