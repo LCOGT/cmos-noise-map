@@ -65,7 +65,7 @@ class RTSMapMaker(MapMaker):
             DESCRIPTION.
 
         """
-        for row_no in range(0, 1):  # self.data_shape[0]):
+        for row_no in range(0, self.data_shape[0]):
             data = []
             for im in self.images:
                 data.append(im.data[row_no, :] + 32768)
@@ -114,7 +114,7 @@ class RTSParameterMapMaker(MapMaker):
 
         """
         param_map = []
-        for row_no in range(0, 1):  # self.data_shape[0]):
+        for row_no in range(0, self.data_shape[0]):
             data = []
             for im in self.images:
                 data.append(im.data[row_no, :] + 32768)

@@ -5,7 +5,7 @@ Created on Mon Jan 23 11:07:17 2023
 @author: prera
 """
 
-from cmos_noise_map.utils.read_write_utils import read_bias_frames, write_hdu
+from cmos_noise_map.utils.read_write_utils import read_bias_frames, write_file
 from cmos_noise_map.map_maker import STDMapMaker, RTSMapMaker, RTSParameterMapMaker
 import click
 
@@ -76,11 +76,11 @@ def cli(ctx: click.core.Context, **kwargs):
         images, tolerance, upper_quantile, min_peak_separation
     )
     readnoise_map = map_maker_object.create_map()
-    
-    data_types = {"std": 'image', "rts": 'image', "param": 'table'}
+
+    data_types = {"std": "image", "rts": "image", "param": "table"}
     filename = args_dict["filename"]
-    hdu_name = args_dict['out_hdu_name']
-    write_hdu(readnoise_map, filename, hdu_name, data_types[method])
+    hdu_name = args_dict["out_hdu_name"]
+    write_file(readnoise_map, filename, hdu_name, data_types[method])
 
 
 if __name__ == "__main__":

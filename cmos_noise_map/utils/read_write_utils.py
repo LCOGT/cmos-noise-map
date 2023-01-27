@@ -12,6 +12,7 @@ import numpy as np
 
 import pandas as pd
 
+
 def read_bias_frames(path: str, data_ext=0):
     """
     A function to open up fits files with memory mapping.
@@ -39,7 +40,7 @@ def read_bias_frames(path: str, data_ext=0):
     return images
 
 
-def write_hdu(data, filename: str, hduname: str = None, data_type='image'):
+def write_file(data, filename: str, hduname: str = None, data_type="image"):
     """
     A function to write the data out to a fits file containing a read nosie map
 
@@ -53,12 +54,12 @@ def write_hdu(data, filename: str, hduname: str = None, data_type='image'):
     None.
 
     """
-    if data_type=='image':
+    if data_type == "image":
         hdr = fits.Header()
-        hdr['NAME'] = hduname
+        hdr["NAME"] = hduname
         hdu = fits.PrimaryHDU(data, header=hdr)
         hdu.writeto(filename, overwrite=True)
-    elif data_type=='table':       
+    elif data_type == "table":
         means = []
         covariances = []
         num_peaks = []
@@ -69,10 +70,18 @@ def write_hdu(data, filename: str, hduname: str = None, data_type='image'):
             num_peaks.append(i[2])
             gmm_weights.append(i[3])
 
-        df = pd.DataFrame({'Means': means, 'Covariances': covariances, 'Number of Peaks': num_peaks, 'Mixture Weights': gmm_weights})
+        df = pd.DataFrame(
+            {
+                "Means": means,
+                "Covariances": covariances,
+                "Number of Peaks": num_peaks,
+                "Mixture Weights": gmm_weights,
+            }
+        )
         df.to_csv(filename, index=False)
     else:
         pass
+
 
 def read_parameter_table(csv_file):
     """
@@ -95,9 +104,14 @@ def read_parameter_table(csv_file):
         DESCRIPTION: The weights of each gaussian in the mixture. All weights sum to 1.
 
     """
-    gmm_df = pd.read_csv(csv_file, header = 0)
-    means = gmm_df['Means']
-    var = gmm_df['Covariances']
-    num_peaks = gmm_df['Number of Peaks']
-    amps = gmm_df['Mixture Weights']
+    gmm_df = pd.read_csv(csv_file, header=0)
+    means = gmm_df["Means"]
+    var = gmm_df["Covariances"]
+    num_peaks = []
+    for i in gmm_df["Number of Peaks"]:
+        if not np.isnan(i):
+            num_peaks.append(int(i))
+        else:
+            num_peaks.append(np.nan)
+    amps = gmm_df["Mixture Weights"]
     return means, var, num_peaks, amps
