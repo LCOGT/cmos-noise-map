@@ -1,4 +1,4 @@
-# Modeling Random Telegraph Signal
+# Modeling RTS
 
 
 
