@@ -181,8 +181,8 @@ def per_pixel_readnoise(p, **kwargs):
 
     Returns
     -------
-    pixel_readnoise : TYPE
-        DESCRIPTION.
+    pixel_readnoise : float
+        Calculated readnoise for one pixel
 
     """
     means, variances, num_peaks, amplitudes = get_rts(p, **kwargs)

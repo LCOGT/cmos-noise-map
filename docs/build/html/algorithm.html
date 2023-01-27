@@ -85,15 +85,16 @@ For a given sample, the likelihood that it belings to a cluster is determined by
 </section>
 <section id="rts-properties">
 <h3>RTS Properties<a class="headerlink" href="#rts-properties" title="Permalink to this headline">¶</a></h3>
-<p>After modelling a subset of test data (200 bias frames taken with a QHY411 CMOS camera), we can investigate the properties of the pixels affected by telegraph noise.
+<p>After modelling a subset of 500x500 pixels in each image in the test data (200 bias frames taken with a QHY411 CMOS camera), we can investigate the properties of the pixels affected by telegraph noise.
 In doing so, we find the following:</p>
 <ul class="simple">
-<li><p>7.8% of pixels are multimodal.</p></li>
+<li><p>7.8% of examined pixels are multimodal.</p></li>
 <li><p>The locations are consistent.</p></li>
 <li><p>Majority of pixels are trimodal; though unexpectedly, a small number of pixels have a bimodal distribution.</p></li>
 <li><p>When run on all pixels in a 500x500 pixel grid, 12% of pixels are affected</p></li>
 <li><p>73% of RTS pixels neighbor another RTS pixel.</p></li>
 </ul>
+<img alt="&quot;A map of locations of bad pixels, color coded by modality. There is a zoomed in section in the top left corner of the map showing adjacency of trimodal.&quot;" src="_images/bad_pixel_map.png" />
 </section>
 </section>
 <section id="error-propagation">
@@ -135,6 +136,7 @@ In doing so, we find the following:</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">cmos-noise-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future-directions.html">Future Directions</a></li>
 </ul>
 
 <div class="relations">

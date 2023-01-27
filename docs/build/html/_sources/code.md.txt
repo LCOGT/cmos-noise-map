@@ -1,7 +1,5 @@
 # cmos-noise-map
 
-## The Basic Framework
-
 ## Code documentation
 
 ### Main wrapper function
@@ -73,4 +71,20 @@
 
 ```{eval-rst}
 .. autofunction:: cmos_noise_map.utils.misc_fns.qc_input
+```
+
+<br>
+
+## The Code Playground
+
+<br>
+
+```{eval-rst}
+.. autofunction:: cmos_noise_map.utils.get_rts_playground.plot_get_rts
+```
+
+<br><br>
+
+```{eval-rst}
+.. autofunction:: cmos_noise_map.utils.get_rts_playground.noise_distribution
 ```

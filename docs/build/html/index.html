@@ -44,28 +44,39 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">cmos-noise-map</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="code.html#the-basic-framework">The Basic Framework</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code.html#code-documentation">Code documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#the-code-playground">The Code Playground</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="future-directions.html">Future Directions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="future-directions.html#overfitting-in-gmm">Overfitting in GMM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="future-directions.html#error-propagation">Error Propagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="future-directions.html#other-solutions-for-cmos-noise">Other solutions for CMOS noise</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<section id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
-</section>
 <section id="about-this-project">
 <h2>About this project<a class="headerlink" href="#about-this-project" title="Permalink to this headline">¶</a></h2>
 <p>This project was started in 2022, as the Las Cumbres Observatory Delta Rho upgrades were underway. We investigated the properties of random telegraph signal, which are further discussed in <a class="reference internal" href="algorithm.html"><span class="doc std std-doc">The Algorithm Section</span></a>,
 and pondered how to deal with it in the new QHY600 cameras being installed at various LCO 0.4m telescopes. We decided to propagate noise as a 2D error map, similar to the <a class="reference external" href="https://github.com/LCOGT/pixel-mask-gen">bad pixel map maker</a>.
 This document has information about why we chose to address the problem of RTS in the way that we did, documents the code, and contains suggestions for future directions and improvements on this work.</p>
 </section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+</section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="id1">
+<h2><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<section id="indices-and-tables">
+<h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
 </section>
 </section>
 
@@ -90,6 +101,7 @@ This document has information about why we chose to address the problem of RTS i
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="algorithm.html">Modeling RTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">cmos-noise-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="future-directions.html">Future Directions</a></li>
 </ul>
 
 <div class="relations">

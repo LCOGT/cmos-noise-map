@@ -86,15 +86,19 @@ amp : TYPE: list(float)
 ```
 
 ### RTS Properties
-%Needs more detail!!
-After modelling a subset of test data (200 bias frames taken with a QHY411 CMOS camera), we can investigate the properties of the pixels affected by telegraph noise.
+After modelling a subset of 500x500 pixels in each image in the test data (200 bias frames taken with a QHY411 CMOS camera), we can investigate the properties of the pixels affected by telegraph noise.
 In doing so, we find the following:
 
-- 7.8% of pixels are multimodal.
+- 7.8% of examined pixels are multimodal.
 - The locations are consistent.
 - Majority of pixels are trimodal; though unexpectedly, a small number of pixels have a bimodal distribution.
 - When run on all pixels in a 500x500 pixel grid, 12% of pixels are affected
 - 73% of RTS pixels neighbor another RTS pixel.
+
+```{eval-rst}
+.. image:: images/bad_pixel_map.png
+    :alt: "A map of locations of bad pixels, color coded by modality. There is a zoomed in section in the top left corner of the map showing adjacency of trimodal."
+```
 
 ## Error Propagation
 With the means, amplitudes, and covariances of individual gaussians we can follow standard error propagation methods to calculate the read noise of each pixel. This is possible because our model essentially models the probability distribution function of the data.

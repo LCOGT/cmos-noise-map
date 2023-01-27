@@ -11,12 +11,8 @@
 
 algorithm
 code
+future-directions
 ```
-#### Indices and tables
-
-- {ref}`genindex`
-- {ref}`modindex`
-- {ref}`search`
 
 ## About this project
 
@@ -24,4 +20,13 @@ This project was started in 2022, as the Las Cumbres Observatory Delta Rho upgra
 and pondered how to deal with it in the new QHY600 cameras being installed at various LCO 0.4m telescopes. We decided to propagate noise as a 2D error map, similar to the [bad pixel map maker](https://github.com/LCOGT/pixel-mask-gen). 
 This document has information about why we chose to address the problem of RTS in the way that we did, documents the code, and contains suggestions for future directions and improvements on this work.
 
+## Installation
+
 ## Usage
+
+## 
+
+#### Indices and tables
+
+- {ref}`genindex`
+- {ref}`search`
