@@ -61,13 +61,13 @@ def write_file(data, filename: str, hduname: str = None, data_type="image"):
 
     """
     if data_type == "image":
-        filename = filename+'.fits'
+        filename = filename + ".fits"
         hdr = fits.Header()
         hdr["NAME"] = hduname
         hdu = fits.PrimaryHDU(data, header=hdr)
         hdu.writeto(filename, overwrite=True)
     elif data_type == "table":
-        filename = filename+'.csv'
+        filename = filename + ".csv"
         means = []
         covariances = []
         num_peaks = []

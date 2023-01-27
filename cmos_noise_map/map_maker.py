@@ -10,6 +10,7 @@ from cmos_noise_map.utils.data_utils import data_to_pixel
 import numpy as np
 import click
 
+
 class MapMaker:
     def __init__(
         self,
@@ -66,7 +67,7 @@ class STDMapMaker(MapMaker):
                 data = []
                 for im in self.images:
                     data.append(im.data[row_no, :] + 32768)
-        
+
                 # convert data to stacked pixels
                 stdimage = np.std(data, axis=0)
                 self.map[row_no, :] = stdimage
@@ -77,7 +78,7 @@ class RTSMapMaker(MapMaker):
     def create_map(self):
         """
         A function wrapping all the methods to produce a full readnoise map
-        
+
         Parameters
         ----------
         inherited from MapMaker class
@@ -93,14 +94,14 @@ class RTSMapMaker(MapMaker):
                 data = []
                 for im in self.images:
                     data.append(im.data[row_no, :] + 32768)
-    
+
                 # convert data to stacked pixels
                 pixels = data_to_pixel(data)
-    
+
                 if not self.upper_quantile:
                     stdimage = np.std(data, axis=0)
                     self.upper_quantile = np.quantile(stdimage, 0.8)
-    
+
                 # Append it all to a pixel map
                 for i, p in enumerate(pixels):
                     noise = per_pixel_readnoise(
@@ -138,14 +139,14 @@ class RTSParameterMapMaker(MapMaker):
                 data = []
                 for im in self.images:
                     data.append(im.data[row_no, :] + 32768)
-    
+
                 # convert data to stacked pixels
                 pixels = data_to_pixel(data)
-    
+
                 if not self.upper_quantile:
                     stdimage = np.std(data, axis=0)
                     self.upper_quantile = np.quantile(stdimage, 0.8)
-    
+
                 # Append it all to a pixel map
                 for i, p in enumerate(pixels):
                     params = get_rts(
