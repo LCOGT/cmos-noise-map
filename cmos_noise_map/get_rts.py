@@ -66,14 +66,14 @@ def get_rts(p, tolerance=0.05, upper_quantile=3, min_peak_separation=10):
     ----------
     p : TYPE: list
         DESCRIPTION: List of pixel values across a set of bias frames
-    tol : TYPE: float
+    tolerance : TYPE: float
         DESCRIPTION: The minimum difference between silhouette scores (likelihood of the model being correct)
                      between n_components=2 and 3. If there is a plateau (i.e. not much improvement between n=2 and n=3)
                      then the number of components chosen for the fit is 2. Not recommended to change unless you have
                      looked at the scores yourself.
-    upper_q: TYPE: float
+    upper_quantile: TYPE: float
         DESCRIPTION: The upper standard deviation cutoff of pixels to be evaluated for telegraph noise.
-    min_peak_sep: TYPE: float
+    min_peak_separation: TYPE: float
         DESCRIPTION: The minimum separation of peaks for them to be considered separate peaks. If they are too close,
         the next lowest component is taken to be the model.
 

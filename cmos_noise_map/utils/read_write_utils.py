@@ -42,12 +42,18 @@ def read_bias_frames(path: str, data_ext=0):
 
 def write_file(data, filename: str, hduname: str = None, data_type="image"):
     """
-    A function to write the data out to a fits file containing a read nosie map
+    A function to write an output file depending on which method was used to generate it.
 
     Parameters
     ----------
-    data : NxN array of floats
-        DESCRIPTION. The data to be written out into the fits file. This is where the readnoise map goes.
+    data : (NxN array of floats)
+        DESCRIPTION. he data to be written out into the fits file. This is where the readnoise map or the parameter map goes.
+    filename : str
+        DESCRIPTION. Name of the file to be written out. This is without the file ending.
+    hduname : str, optional
+        DESCRIPTION. The name of the hdu in case of writing out a fits file. The default is None.
+    data_type : TYPE, optional
+        DESCRIPTION. Type of data to be written out. This is determined by the program depending on what method was used. The default is "image". If the method used was "param" then the type is "table"
 
     Returns
     -------
@@ -55,11 +61,13 @@ def write_file(data, filename: str, hduname: str = None, data_type="image"):
 
     """
     if data_type == "image":
+        filename = filename+'.fits'
         hdr = fits.Header()
         hdr["NAME"] = hduname
         hdu = fits.PrimaryHDU(data, header=hdr)
         hdu.writeto(filename, overwrite=True)
     elif data_type == "table":
+        filename = filename+'.csv'
         means = []
         covariances = []
         num_peaks = []

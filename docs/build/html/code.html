@@ -54,16 +54,65 @@
 <h3>Main functions to produce a read noise map<a class="headerlink" href="#main-functions-to-produce-a-read-noise-map" title="Permalink to this headline">¶</a></h3>
 <br>
 <dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.methods.do_rts">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.methods.</span></span><span class="sig-name descname"><span class="pre">do_rts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_q</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.methods.do_rts" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cmos_noise_map.map_maker.MapMaker.__init__">
+<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.map_maker.MapMaker.</span></span><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_peak_seperation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.map_maker.MapMaker.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class initializing the data to be passed through each map making algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> (<em>list</em>) -- DESCRIPTION. The fits opened input images to be processed</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em><em>, </em><em>optional</em>) -- <dl class="simple">
+<dt>DESCRIPTION. The minimum difference between silhouette scores (likelihood of the model being correct)</dt><dd><p>between n_components=2 and 3. If there is a plateau (i.e. not much improvement between n=2 and n=3)
+then the number of components chosen for the fit is 2. Not recommended to change unless you have
+looked at the scores yourself. The default is 0.05.</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>upper_quantile</strong> (<em>float</em><em>, </em><em>optional</em>) -- DESCRIPTION. The upper standard deviation cutoff of pixels to be evaluated for telegraph noise.</p></li>
+<li><p><strong>min_peak_seperation</strong> (<em>float</em><em>, </em><em>optional</em>) -- DESCRIPTION. The minimum separation of peaks for them to be considered separate peaks. If they are too close,
+the next lowest component is taken to be the model. The default is 10.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p><br><br></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cmos_noise_map.map_maker.STDMapMaker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cmos_noise_map.map_maker.</span></span><span class="sig-name descname"><span class="pre">STDMapMaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_peak_seperation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.map_maker.STDMapMaker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cmos_noise_map.map_maker.STDMapMaker.create_map">
+<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.map_maker.STDMapMaker.</span></span><span class="sig-name descname"><span class="pre">create_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.map_maker.STDMapMaker.create_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to take the standard deviation of each pixel to use as a readnoise map.
+This is a faster method than RTSMapMaker, less rigorous statistically but achieves similar answers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>readnoise_map</strong> -- array where each element is the readnoise associated with that pixel.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>array of the same shape as the input data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p><br><br></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cmos_noise_map.map_maker.RTSMapMaker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cmos_noise_map.map_maker.</span></span><span class="sig-name descname"><span class="pre">RTSMapMaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_peak_seperation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.map_maker.RTSMapMaker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cmos_noise_map.map_maker.RTSMapMaker.create_map">
+<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.map_maker.RTSMapMaker.</span></span><span class="sig-name descname"><span class="pre">create_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.map_maker.RTSMapMaker.create_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function wrapping all the methods to produce a full readnoise map</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) -- DESCRIPTION. The path to the files to be read in</p></li>
-<li><p><strong>upper_q</strong> (<em>float</em>) -- DESCRIPTION. Upper standard deviation cutoff for noisy pixels for evaluation</p></li>
-<li><p><strong>*args</strong> -- DESCRIPTION. The arguments to be passed to get_rts</p></li>
-</ul>
+<dd class="field-odd"><p><strong>class</strong> (<em>inherited from MapMaker</em>) -- </p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>readnoise_map</strong> -- array where each element is the readnoise associated with that pixel.</p>
@@ -75,39 +124,21 @@
 </dd></dl>
 
 <p><br><br></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cmos_noise_map.map_maker.RTSParameterMapMaker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cmos_noise_map.map_maker.</span></span><span class="sig-name descname"><span class="pre">RTSParameterMapMaker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_peak_seperation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.map_maker.RTSParameterMapMaker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.methods.do_std">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.methods.</span></span><span class="sig-name descname"><span class="pre">do_std</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.methods.do_std" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function to take the standard deviation of each pixel to use as a readnoise map.
-This is a faster method than do_rts, less rigorous statistically but achieves similar answers.</p>
+<dt class="sig sig-object py" id="cmos_noise_map.map_maker.RTSMapMaker.create_map">
+<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.map_maker.RTSMapMaker.</span></span><span class="sig-name descname"><span class="pre">create_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.map_maker.RTSMapMaker.create_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function wrapping all the methods to produce a full readnoise map</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) -- DESCRIPTION. The path to the files to be read in</p>
+<dd class="field-odd"><p><strong>class</strong> (<em>inherited from MapMaker</em>) -- </p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>readnoise_map</strong> -- array where each element is the readnoise associated with that pixel.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>array of the same shape as the input data</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><br><br></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.methods.do_rts_params">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.methods.</span></span><span class="sig-name descname"><span class="pre">do_rts_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_q</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.methods.do_rts_params" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) -- DESCRIPTION. The path to the files to be read in</p></li>
-<li><p><strong>upper_q</strong> (<em>float</em>) -- DESCRIPTION. Upper standard deviation cutoff for noisy pixels for evaluation</p></li>
-<li><p><strong>*args</strong> -- DESCRIPTION. The arguments to be passed to get_rts</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>readnoise_map</strong> -- array where each element is a list of associated parameters from modelling the pixel.
-It returns a nan for each parameter if a pixel does not exhibit RTS or is not noisy.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>array of the same shape as the input data</p>
@@ -119,7 +150,44 @@ It returns a nan for each parameter if a pixel does not exhibit RTS or is not no
 </section>
 <section id="base-functions-to-calculate-the-read-noise-from-standard-deviation">
 <h3>Base functions to calculate the read noise from standard deviation<a class="headerlink" href="#base-functions-to-calculate-the-read-noise-from-standard-deviation" title="Permalink to this headline">¶</a></h3>
-<br>
+<p><br><br></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cmos_noise_map.get_rts.get_rts">
+<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.get_rts.</span></span><span class="sig-name descname"><span class="pre">get_rts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_quantile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_peak_separation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.get_rts.get_rts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses a Gaussian Mixture model, which is essentially a series of gaussian distributions of different means,
+variances, and amplitudes added together to model the clustering of data points.
+To avoid overfitting, we go through a series of logical checks to ensure that data is being fitted properly.
+This does NOT re-evaluate the model with every logical step, all possible fit_funs (constrained by physics)
+are carried through the steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>TYPE: list</em>) -- DESCRIPTION: List of pixel values across a set of bias frames</p></li>
+<li><p><strong>tolerance</strong> (<em>TYPE: float</em>) -- <dl class="simple">
+<dt>DESCRIPTION: The minimum difference between silhouette scores (likelihood of the model being correct)</dt><dd><p>between n_components=2 and 3. If there is a plateau (i.e. not much improvement between n=2 and n=3)
+then the number of components chosen for the fit is 2. Not recommended to change unless you have
+looked at the scores yourself.</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>upper_quantile</strong> (<em>TYPE: float</em>) -- DESCRIPTION: The upper standard deviation cutoff of pixels to be evaluated for telegraph noise.</p></li>
+<li><p><strong>min_peak_separation</strong> (<em>TYPE: float</em>) -- DESCRIPTION: The minimum separation of peaks for them to be considered separate peaks. If they are too close,
+the next lowest component is taken to be the model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>peak_location</strong> (<em>TYPE: list(float), length = num_peaks</em>) -- DESCRIPTION: The means of each of the Gaussian modes calculated by GMM</p></li>
+<li><p><strong>peak_widths</strong> (<em>TYPE: list(float), length = num_peaks</em>) -- DESCRIPTION: The covariance of each Gaussian mode calculated by GMM</p></li>
+<li><p><strong>num_peaks</strong> (<em>TYPE: int</em>) -- DESCRIPTION: The number of Gaussians used to model the distribution of values of the pixel</p></li>
+<li><p><strong>amp</strong> (<em>TYPE: list(float)</em>) -- DESCRIPTION: The weights of each gaussian in the mixture. All weights sum to 1.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p><br><br></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="cmos_noise_map.get_rts.readnoise">
 <span class="sig-prename descclassname"><span class="pre">cmos_noise_map.get_rts.</span></span><span class="sig-name descname"><span class="pre">readnoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">means</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amplitudes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.get_rts.readnoise" title="Permalink to this definition">¶</a></dt>
@@ -170,8 +238,8 @@ single readnoise value.</p>
 <h3>Read and write functions<a class="headerlink" href="#read-and-write-functions" title="Permalink to this headline">¶</a></h3>
 <br>
 <dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.read_write_fns.read_bias_frames">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.read_write_fns.</span></span><span class="sig-name descname"><span class="pre">read_bias_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.read_write_fns.read_bias_frames" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cmos_noise_map.utils.read_write_utils.read_bias_frames">
+<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.read_write_utils.</span></span><span class="sig-name descname"><span class="pre">read_bias_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.read_write_utils.read_bias_frames" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to open up fits files with memory mapping.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -191,12 +259,17 @@ single readnoise value.</p>
 
 <p><br><br></p>
 <dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.read_write_fns.write_hdu">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.read_write_fns.</span></span><span class="sig-name descname"><span class="pre">write_hdu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.read_write_fns.write_hdu" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function to write the data out to a fits file containing a read nosie map</p>
+<dt class="sig sig-object py" id="cmos_noise_map.utils.read_write_utils.write_file">
+<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.read_write_utils.</span></span><span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hduname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'image'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.read_write_utils.write_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to write an output file depending on which method was used to generate it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>NxN array of floats</em>) -- DESCRIPTION. The data to be written out into the fits file. This is where the readnoise map goes.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>(</em><em>NxN array of floats</em><em>)</em>) -- DESCRIPTION. he data to be written out into the fits file. This is where the readnoise map or the parameter map goes.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) -- DESCRIPTION. Name of the file to be written out. This is without the file ending.</p></li>
+<li><p><strong>hduname</strong> (<em>str</em><em>, </em><em>optional</em>) -- DESCRIPTION. The name of the hdu in case of writing out a fits file. The default is None.</p></li>
+<li><p><strong>data_type</strong> (<em>TYPE</em><em>, </em><em>optional</em>) -- DESCRIPTION. Type of data to be written out. This is determined by the program depending on what method was used. The default is &quot;image&quot;. If the method used was &quot;param&quot; then the type is &quot;table&quot;</p></li>
+</ul>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>None.</p>
@@ -204,14 +277,35 @@ single readnoise value.</p>
 </dl>
 </dd></dl>
 
+<p><br><br></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cmos_noise_map.utils.read_write_utils.read_parameter_table">
+<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.read_write_utils.</span></span><span class="sig-name descname"><span class="pre">read_parameter_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.read_write_utils.read_parameter_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>A utility function to read in a parameter map</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>csv_file</strong> (<em>.csv file</em>) -- The csv file containing the parameter data output.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>means</strong> (<em>TYPE: list(float), length = num_peaks</em>) -- DESCRIPTION: The means of each of the Gaussian modes calculated by GMM</p></li>
+<li><p><strong>var</strong> (<em>TYPE: list(float), length = num_peaks</em>) -- DESCRIPTION: The covariance of each Gaussian mode calculated by GMM</p></li>
+<li><p><strong>num_peaks</strong> (<em>TYPE: int</em>) -- DESCRIPTION: The number of Gaussians used to model the distribution of values of the pixel</p></li>
+<li><p><strong>amps</strong> (<em>TYPE: list(float)</em>) -- DESCRIPTION: The weights of each gaussian in the mixture. All weights sum to 1.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
 <br>
 </section>
-<section id="miscellaneous-utility-functions">
-<h3>Miscellaneous utility functions<a class="headerlink" href="#miscellaneous-utility-functions" title="Permalink to this headline">¶</a></h3>
+<section id="data-utility-functions">
+<h3>Data utility functions<a class="headerlink" href="#data-utility-functions" title="Permalink to this headline">¶</a></h3>
 <br>
 <dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.utils.misc_fns.data_to_pixel">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.misc_fns.</span></span><span class="sig-name descname"><span class="pre">data_to_pixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.misc_fns.data_to_pixel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cmos_noise_map.utils.data_utils.data_to_pixel">
+<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">data_to_pixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.data_utils.data_to_pixel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes data in the form of a series of opened images (of whatever shape) and
 returns the data as a list of pixel values across images, along with data.</p>
 <dl class="field-list simple">
@@ -229,8 +323,8 @@ returns the data as a list of pixel values across images, along with data.</p>
 
 <p><br><br></p>
 <dl class="py function">
-<dt class="sig sig-object py" id="cmos_noise_map.utils.misc_fns.qc_input">
-<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.misc_fns.</span></span><span class="sig-name descname"><span class="pre">qc_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.misc_fns.qc_input" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="cmos_noise_map.utils.data_utils.qc_input">
+<span class="sig-prename descclassname"><span class="pre">cmos_noise_map.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">qc_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cmos_noise_map.utils.data_utils.qc_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ensure that data is all the same shape, and that there are at least 50 files.
 This is used in read_bias_frames</p>
 </dd></dl>
