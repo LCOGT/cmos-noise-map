@@ -3,12 +3,13 @@
 """
 Created on Tue Jan 24 16:02:56 2023
 
-@author: pkottapalli
+@author: Prerana Kottapalli
 """
-from cmos_noise_map.get_rts import per_pixel_readnoise, get_rts
-from cmos_noise_map.utils.data_utils import data_to_pixel
 import numpy as np
 import click
+
+from cmos_noise_map.get_rts import per_pixel_readnoise, get_rts
+from cmos_noise_map.utils.data_utils import data_to_pixel
 
 
 class MapMaker:

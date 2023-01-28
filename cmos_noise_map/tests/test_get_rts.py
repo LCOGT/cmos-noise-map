@@ -3,9 +3,10 @@
 """
 Created on Fri Jan 20 16:00:36 2023
 
-@author: pkottapalli
+@author: Prerana Kottapalli
 """
 import numpy as np
+
 from cmos_noise_map.get_rts import get_rts, readnoise
 
 

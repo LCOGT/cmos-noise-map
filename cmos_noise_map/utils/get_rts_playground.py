@@ -3,7 +3,7 @@
 """
 Created on Tue Jan 24 10:18:42 2023
 
-@author: pkottapalli
+@author: Prerana Kottapalli
 """
 from sklearn.mixture import GaussianMixture
 import numpy as np

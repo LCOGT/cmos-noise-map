@@ -2,12 +2,13 @@
 """
 Created on Mon Jan 23 11:07:17 2023
 
-@author: prera
+@author: Prerana Kottapalli
 """
+
+import click
 
 from cmos_noise_map.utils.read_write_utils import read_bias_frames, write_file
 from cmos_noise_map.map_maker import STDMapMaker, RTSMapMaker, RTSParameterMapMaker
-import click
 
 
 @click.command()

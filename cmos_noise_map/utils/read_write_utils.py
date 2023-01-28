@@ -3,15 +3,14 @@
 """
 Created on Tue Jan 24 13:42:45 2023
 
-@author: pkottapalli
+@author: Prerana Kottapalli
 """
-from cmos_noise_map.utils.data_utils import qc_input
 from astropy.io import fits
 from glob import glob
 import numpy as np
-
 import pandas as pd
 
+from cmos_noise_map.utils.data_utils import qc_input
 
 def read_bias_frames(path: str, data_ext=0):
     """
