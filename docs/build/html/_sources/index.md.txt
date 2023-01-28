@@ -22,9 +22,52 @@ This document has information about why we chose to address the problem of RTS i
 
 ## Installation
 
+### From PyPi
+
+¯\_(ツ)_/¯ Not on Pypi yet
+
+### From GitHub
+
+```
+cd cmos-noise-map
+poetry install
+```
+
 ## Usage
 
-## 
+```
+Usage: rts-maker [OPTIONS] PATH FILENAME [METHOD]
+
+  This script builds a noise map with the chosen method.
+
+  path: Path to input without the .fits at the end
+
+  filename: Path to write file, including the filename ending in .fits
+
+  method: Default method is std. Available methods are std, rts, and param.
+  See docs for more information about each method.
+
+Options:
+  -r, --data_ext INTEGER          Extension of fits file that contains the
+                                  image data
+  -uq, --upper_quantile FLOAT     Standard deviation cutoff for pixel noise
+                                  evaluation
+  -t, --tolerance FLOAT           The minimum difference between silhouette
+                                  scores. See docs for more information.
+  -m, --min_peak_separation FLOAT
+                                  Minimum difference between pixel value
+                                  cluster centers to be considered separate
+                                  clusters
+  -o, --out_hdu_name TEXT         Name for the header in which the data will
+                                  be stored
+  --help                          Show this message and exit.
+
+```
+## Tests
+To run the unit tests, simply run:
+```
+poetry run pytest
+```
 
 #### Indices and tables
 
