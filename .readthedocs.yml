@@ -3,7 +3,8 @@ version: 2
 
 # Set the version of Python and other tools you might need
 build:
-  tools: {python: "3.10"}
+  tools: 
+    python: "3.7"
   jobs:
     pre_create_environment:
       - asdf plugin add poetry
