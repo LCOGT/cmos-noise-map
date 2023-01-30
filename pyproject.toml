@@ -20,6 +20,8 @@ pandas = "^1.5.3"
 sphinx = ">=4,<6"
 myst-parser = "^0.18.1"
 
+[tool.poetry.extras]
+docs=["sphinx"]
 
 [tool.poetry.scripts]
 rts-maker = "cmos_noise_map.main:cli"
