@@ -4,7 +4,7 @@
 <html lang="python">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Future Directions &#8212; CMOS Noise Map 0.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -12,7 +12,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="cmos-noise-map" href="code.html" />
@@ -33,9 +35,9 @@
           <div class="body" role="main">
             
   <section id="future-directions">
-<h1>Future Directions<a class="headerlink" href="#future-directions" title="Permalink to this headline">¶</a></h1>
+<h1>Future Directions<a class="headerlink" href="#future-directions" title="Permalink to this heading">¶</a></h1>
 <section id="overfitting-in-gmm">
-<h2>Overfitting in GMM<a class="headerlink" href="#overfitting-in-gmm" title="Permalink to this headline">¶</a></h2>
+<h2>Overfitting in GMM<a class="headerlink" href="#overfitting-in-gmm" title="Permalink to this heading">¶</a></h2>
 <p>The current way that we avoid overfitting is by taking a standard deviation cutoff so only some pixels are evaluated,
 and the peak separation and silhouette score plateauing checks were found by trial by error. There are other methods prescribed to avoid overfitting in a gaussian mixture model.
 One such resource is <a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0167947318301245?fr=RR-2&amp;ref=pdf_download&amp;rr=78b0d4af1ef42b89">this article by J. Andrews et al 2018</a>
@@ -44,12 +46,12 @@ which dicusses using a bootstrap sampling algorithm to find the optimal number o
 <p>Without changing the algorithm, Python 3.10 has implemented a <a class="reference external" href="https://docs.python.org/3/whatsnew/3.10.html#pep-634-structural-pattern-matching">match case algorithm</a> which should speed up the overfitting checks as they stand now.</p>
 </section>
 <section id="error-propagation">
-<h2>Error Propagation<a class="headerlink" href="#error-propagation" title="Permalink to this headline">¶</a></h2>
+<h2>Error Propagation<a class="headerlink" href="#error-propagation" title="Permalink to this heading">¶</a></h2>
 <p>There are other ways to extract the read noise from the mixture model like <a class="reference external" href="https://link-springer-com.proxy.library.ucsb.edu:9443/article/10.1007/s00158-019-02301-y#Sec1">in Zhang et al 2019</a>, which may warrant exploration if the current method is not found
 rigorous enough.</p>
 </section>
 <section id="other-solutions-for-cmos-noise">
-<h2>Other solutions for CMOS noise<a class="headerlink" href="#other-solutions-for-cmos-noise" title="Permalink to this headline">¶</a></h2>
+<h2>Other solutions for CMOS noise<a class="headerlink" href="#other-solutions-for-cmos-noise" title="Permalink to this heading">¶</a></h2>
 <p>There is another type of noise (SUTR)</p>
 </section>
 </section>
@@ -100,7 +102,7 @@ rigorous enough.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -117,8 +119,8 @@ rigorous enough.</p>
       &copy;2023, Prerana Kottapalli, Curtis McCully, Daniel Harbeck, Matt Daily.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/future-directions.md.txt"

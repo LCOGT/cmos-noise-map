@@ -4,7 +4,7 @@
 <html lang="python">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Modeling RTS &#8212; CMOS Noise Map 0.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -12,7 +12,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,9 +37,9 @@
           <div class="body" role="main">
             
   <section id="modeling-rts">
-<h1>Modeling RTS<a class="headerlink" href="#modeling-rts" title="Permalink to this headline">¶</a></h1>
+<h1>Modeling RTS<a class="headerlink" href="#modeling-rts" title="Permalink to this heading">¶</a></h1>
 <section id="what-is-random-telegraph-signal">
-<h2>What is Random Telegraph Signal?<a class="headerlink" href="#what-is-random-telegraph-signal" title="Permalink to this headline">¶</a></h2>
+<h2>What is Random Telegraph Signal?<a class="headerlink" href="#what-is-random-telegraph-signal" title="Permalink to this heading">¶</a></h2>
 <p>Random Telegraph Signal is the result of a randomly occurring jumps between discrete voltage levels, whose source is the Metal-Oxide Semiconductor Field Effect Transistor (MOSFET) in each pixel in a CMOS sensor.
 RTS shows up in bias frames, and any other time where the incoming signal is very low. This is because the temporal signal or light signal is usually dominant over RTS, which can have a read noise anywhere about 20e- and above.
 Due to correlated double sampling, where the read out value of a pixel is taken as the difference between the activated pixel voltage and the reset voltage, we see a multi-modal distribution of data points:</p>
@@ -47,11 +49,11 @@ Due to correlated double sampling, where the read out value of a pixel is taken 
 <p>We want to investigate all of the pixels so that we can find out more about Random Telegraph Signal behavior.</p>
 </section>
 <section id="gaussian-mixture-models-and-rts-properties">
-<h2>Gaussian Mixture Models and RTS Properties<a class="headerlink" href="#gaussian-mixture-models-and-rts-properties" title="Permalink to this headline">¶</a></h2>
+<h2>Gaussian Mixture Models and RTS Properties<a class="headerlink" href="#gaussian-mixture-models-and-rts-properties" title="Permalink to this heading">¶</a></h2>
 <p>As we plotted histograms for the pixels on a detector, we found unimodal, bimodal, and trimodal pixel noise distributions. Our end goal was to parametrize the noise by finding the peak locations and variances for each peak present.
 After some trial and error with Maximum Likelihood fitting and Kernel Density Estimation on the histograms, Gaussian Mixture Modelling seemed to be the best option to non-parametrically model the data (not the histogram representation of it).</p>
 <section id="gaussian-mixture-model-basics">
-<h3>Gaussian Mixture Model Basics<a class="headerlink" href="#gaussian-mixture-model-basics" title="Permalink to this headline">¶</a></h3>
+<h3>Gaussian Mixture Model Basics<a class="headerlink" href="#gaussian-mixture-model-basics" title="Permalink to this heading">¶</a></h3>
 <p>Gaussian Mixture Modelling is a parametric probability density function represented as a weighted sum of Gaussian component densities. It attempts to represent the data as a sum of weighted gaussians with unique means, and covariances:</p>
 <div class="math notranslate nohighlight">
 \[p( \textbf{x}| \lambda ) = \sum_{i=1}^{M} w_{i} g(\textbf{x}| \mu_{i} \Sigma_{i} )\]</div>
@@ -84,7 +86,7 @@ For a given sample, the likelihood that it belings to a cluster is determined by
 <img alt="&quot;The model, histogram, and data of an RTS affected pixel with two modes.&quot;" src="_images/bimodal.png" />
 </section>
 <section id="rts-properties">
-<h3>RTS Properties<a class="headerlink" href="#rts-properties" title="Permalink to this headline">¶</a></h3>
+<h3>RTS Properties<a class="headerlink" href="#rts-properties" title="Permalink to this heading">¶</a></h3>
 <p>After modelling a subset of 500x500 pixels in each image in the test data (200 bias frames taken with a QHY411 CMOS camera), we can investigate the properties of the pixels affected by telegraph noise.
 In doing so, we find the following:</p>
 <ul class="simple">
@@ -98,7 +100,7 @@ In doing so, we find the following:</p>
 </section>
 </section>
 <section id="error-propagation">
-<h2>Error Propagation<a class="headerlink" href="#error-propagation" title="Permalink to this headline">¶</a></h2>
+<h2>Error Propagation<a class="headerlink" href="#error-propagation" title="Permalink to this heading">¶</a></h2>
 <p>With the means, amplitudes, and covariances of individual gaussians we can follow standard error propagation methods to calculate the read noise of each pixel. This is possible because our model essentially models the probability distribution function of the data.</p>
 <p>To get from covariance to a variance of each of our 1D gaussians:</p>
 <div class="math notranslate nohighlight">
@@ -157,7 +159,7 @@ In doing so, we find the following:</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -174,8 +176,8 @@ In doing so, we find the following:</p>
       &copy;2023, Prerana Kottapalli, Curtis McCully, Daniel Harbeck, Matt Daily.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/algorithm.md.txt"
