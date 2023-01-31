@@ -14,13 +14,11 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Modeling RTS" href="algorithm.html" /> 
+    <link rel="next" title="cmos-noise-map" href="code.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,8 +38,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Modeling RTS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">cmos-noise-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Modeling RTS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playground.html">The Code Playground</a></li>
 <li class="toctree-l1"><a class="reference internal" href="future-directions.html">Future Directions</a></li>
 </ul>
 
@@ -70,21 +69,25 @@
            <div itemprop="articleBody">
              
   <section id="cmos-noise-map-documentation">
-<h1>CMOS Noise Map documentation<a class="headerlink" href="#cmos-noise-map-documentation" title="Permalink to this heading"></a></h1>
+<h1>CMOS Noise Map documentation<a class="headerlink" href="#cmos-noise-map-documentation" title="Permalink to this headline"></a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="code.html">cmos-noise-map</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code.html#standard-deviation-noise-map-default">Standard Deviation Noise Map [Default]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#model-pixel-noise-with-gmm">Model Pixel Noise with GMM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#getting-pixel-model-params-from-gmm">Getting pixel model params from GMM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#main-wrapper-function">Main wrapper function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#base-functions-to-calculate-the-read-noise-from-standard-deviation">Base functions to calculate the read noise from standard deviation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="algorithm.html">Modeling RTS</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="algorithm.html#what-is-random-telegraph-signal">What is Random Telegraph Signal?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithm.html#gaussian-mixture-models-and-rts-properties">Gaussian Mixture Models and RTS Properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithm.html#error-propagation">Error Propagation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">cmos-noise-map</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="code.html#code-documentation">Code documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#the-code-playground">The Code Playground</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="playground.html">The Code Playground</a></li>
 <li class="toctree-l1"><a class="reference internal" href="future-directions.html">Future Directions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="future-directions.html#overfitting-in-gmm">Overfitting in GMM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="future-directions.html#error-propagation">Error Propagation</a></li>
@@ -94,19 +97,19 @@
 </ul>
 </div>
 <section id="about-this-project">
-<h2>About this project<a class="headerlink" href="#about-this-project" title="Permalink to this heading"></a></h2>
+<h2>About this project<a class="headerlink" href="#about-this-project" title="Permalink to this headline"></a></h2>
 <p>This project was started in 2022, as the Las Cumbres Observatory Delta Rho upgrades were underway. We investigated the properties of random telegraph signal, which are further discussed in <a class="reference internal" href="algorithm.html"><span class="doc std std-doc">The Algorithm Section</span></a>,
 and pondered how to deal with it in the new QHY600 cameras being installed at various LCO 0.4m telescopes. We decided to propagate noise as a 2D error map, similar to the <a class="reference external" href="https://github.com/LCOGT/pixel-mask-gen">bad pixel map maker</a>.
 This document has information about why we chose to address the problem of RTS in the way that we did, documents the code, and contains suggestions for future directions and improvements on this work.</p>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
 <section id="from-pypi">
-<h3>From PyPi<a class="headerlink" href="#from-pypi" title="Permalink to this heading"></a></h3>
+<h3>From PyPi<a class="headerlink" href="#from-pypi" title="Permalink to this headline"></a></h3>
 <p>¯_(ツ)_/¯ Not on Pypi yet</p>
 </section>
 <section id="from-github">
-<h3>From GitHub<a class="headerlink" href="#from-github" title="Permalink to this heading"></a></h3>
+<h3>From GitHub<a class="headerlink" href="#from-github" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">cmos</span><span class="o">-</span><span class="n">noise</span><span class="o">-</span><span class="nb">map</span>
 <span class="n">poetry</span> <span class="n">install</span>
 </pre></div>
@@ -114,7 +117,7 @@ This document has information about why we chose to address the problem of RTS i
 </section>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">rts</span><span class="o">-</span><span class="n">maker</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">PATH</span> <span class="n">FILENAME</span> <span class="p">[</span><span class="n">METHOD</span><span class="p">]</span>
 
   <span class="n">This</span> <span class="n">script</span> <span class="n">builds</span> <span class="n">a</span> <span class="n">noise</span> <span class="nb">map</span> <span class="k">with</span> <span class="n">the</span> <span class="n">chosen</span> <span class="n">method</span><span class="o">.</span>
@@ -145,13 +148,13 @@ This document has information about why we chose to address the problem of RTS i
 </div>
 </section>
 <section id="tests">
-<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this heading"></a></h2>
+<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this headline"></a></h2>
 <p>To run the unit tests, simply run:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">poetry</span> <span class="n">run</span> <span class="n">pytest</span>
 </pre></div>
 </div>
 <section id="indices-and-tables">
-<h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h3>
+<h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline"></a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
@@ -164,7 +167,7 @@ This document has information about why we chose to address the problem of RTS i
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="algorithm.html" class="btn btn-neutral float-right" title="Modeling RTS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="code.html" class="btn btn-neutral float-right" title="cmos-noise-map" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

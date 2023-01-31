@@ -14,15 +14,13 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="cmos-noise-map" href="code.html" />
-    <link rel="prev" title="CMOS Noise Map documentation" href="index.html" /> 
+    <link rel="next" title="The Code Playground" href="playground.html" />
+    <link rel="prev" title="cmos-noise-map" href="code.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,6 +40,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="code.html">cmos-noise-map</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Modeling RTS</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#what-is-random-telegraph-signal">What is Random Telegraph Signal?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#gaussian-mixture-models-and-rts-properties">Gaussian Mixture Models and RTS Properties</a><ul>
@@ -52,7 +51,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#error-propagation">Error Propagation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">cmos-noise-map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="playground.html">The Code Playground</a></li>
 <li class="toctree-l1"><a class="reference internal" href="future-directions.html">Future Directions</a></li>
 </ul>
 
@@ -81,9 +80,9 @@
            <div itemprop="articleBody">
              
   <section id="modeling-rts">
-<h1>Modeling RTS<a class="headerlink" href="#modeling-rts" title="Permalink to this heading"></a></h1>
+<h1>Modeling RTS<a class="headerlink" href="#modeling-rts" title="Permalink to this headline"></a></h1>
 <section id="what-is-random-telegraph-signal">
-<h2>What is Random Telegraph Signal?<a class="headerlink" href="#what-is-random-telegraph-signal" title="Permalink to this heading"></a></h2>
+<h2>What is Random Telegraph Signal?<a class="headerlink" href="#what-is-random-telegraph-signal" title="Permalink to this headline"></a></h2>
 <p>Random Telegraph Signal is the result of a randomly occurring jumps between discrete voltage levels, whose source is the Metal-Oxide Semiconductor Field Effect Transistor (MOSFET) in each pixel in a CMOS sensor.
 RTS shows up in bias frames, and any other time where the incoming signal is very low. This is because the temporal signal or light signal is usually dominant over RTS, which can have a read noise anywhere about 20e- and above.
 Due to correlated double sampling, where the read out value of a pixel is taken as the difference between the activated pixel voltage and the reset voltage, we see a multi-modal distribution of data points:</p>
@@ -93,11 +92,11 @@ Due to correlated double sampling, where the read out value of a pixel is taken 
 <p>We want to investigate all of the pixels so that we can find out more about Random Telegraph Signal behavior.</p>
 </section>
 <section id="gaussian-mixture-models-and-rts-properties">
-<h2>Gaussian Mixture Models and RTS Properties<a class="headerlink" href="#gaussian-mixture-models-and-rts-properties" title="Permalink to this heading"></a></h2>
+<h2>Gaussian Mixture Models and RTS Properties<a class="headerlink" href="#gaussian-mixture-models-and-rts-properties" title="Permalink to this headline"></a></h2>
 <p>As we plotted histograms for the pixels on a detector, we found unimodal, bimodal, and trimodal pixel noise distributions. Our end goal was to parametrize the noise by finding the peak locations and variances for each peak present.
 After some trial and error with Maximum Likelihood fitting and Kernel Density Estimation on the histograms, Gaussian Mixture Modelling seemed to be the best option to non-parametrically model the data (not the histogram representation of it).</p>
 <section id="gaussian-mixture-model-basics">
-<h3>Gaussian Mixture Model Basics<a class="headerlink" href="#gaussian-mixture-model-basics" title="Permalink to this heading"></a></h3>
+<h3>Gaussian Mixture Model Basics<a class="headerlink" href="#gaussian-mixture-model-basics" title="Permalink to this headline"></a></h3>
 <p>Gaussian Mixture Modelling is a parametric probability density function represented as a weighted sum of Gaussian component densities. It attempts to represent the data as a sum of weighted gaussians with unique means, and covariances:</p>
 <div class="math notranslate nohighlight">
 \[p( \textbf{x}| \lambda ) = \sum_{i=1}^{M} w_{i} g(\textbf{x}| \mu_{i} \Sigma_{i} )\]</div>
@@ -130,7 +129,7 @@ For a given sample, the likelihood that it belings to a cluster is determined by
 <img alt="&quot;The model, histogram, and data of an RTS affected pixel with two modes.&quot;" src="_images/bimodal.png" />
 </section>
 <section id="rts-properties">
-<h3>RTS Properties<a class="headerlink" href="#rts-properties" title="Permalink to this heading"></a></h3>
+<h3>RTS Properties<a class="headerlink" href="#rts-properties" title="Permalink to this headline"></a></h3>
 <p>After modelling a subset of 500x500 pixels in each image in the test data (200 bias frames taken with a QHY411 CMOS camera), we can investigate the properties of the pixels affected by telegraph noise.
 In doing so, we find the following:</p>
 <ul class="simple">
@@ -144,7 +143,7 @@ In doing so, we find the following:</p>
 </section>
 </section>
 <section id="error-propagation">
-<h2>Error Propagation<a class="headerlink" href="#error-propagation" title="Permalink to this heading"></a></h2>
+<h2>Error Propagation<a class="headerlink" href="#error-propagation" title="Permalink to this headline"></a></h2>
 <p>With the means, amplitudes, and covariances of individual gaussians we can follow standard error propagation methods to calculate the read noise of each pixel. This is possible because our model essentially models the probability distribution function of the data.</p>
 <p>To get from covariance to a variance of each of our 1D gaussians:</p>
 <div class="math notranslate nohighlight">
@@ -160,8 +159,8 @@ In doing so, we find the following:</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="CMOS Noise Map documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="code.html" class="btn btn-neutral float-right" title="cmos-noise-map" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="code.html" class="btn btn-neutral float-left" title="cmos-noise-map" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="playground.html" class="btn btn-neutral float-right" title="The Code Playground" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
