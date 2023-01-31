@@ -9,8 +9,9 @@
 :caption: 'Contents:'
 :maxdepth: 2
 
-algorithm
 code
+algorithm
+playground
 future-directions
 ```
 

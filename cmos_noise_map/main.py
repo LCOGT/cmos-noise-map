@@ -44,7 +44,7 @@ from cmos_noise_map.map_maker import STDMapMaker, RTSMapMaker, RTSParameterMapMa
     help="Minimum difference between pixel value cluster centers to be considered separate clusters",
 )
 @click.option(
-    "--out_file_name",
+    "--out_hdu_name",
     "-o",
     default=None,
     type=str,
@@ -80,7 +80,7 @@ def cli(ctx: click.core.Context, **kwargs):
 
     data_types = {"std": "image", "rts": "image", "param": "table"}
     filename = args_dict["filename"]
-    hdu_name = args_dict["out_file_name"]
+    hdu_name = args_dict["out_hdu_name"]
     write_file(readnoise_map, filename, hdu_name, data_types[method])
 
 

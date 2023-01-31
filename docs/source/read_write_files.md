@@ -1,4 +1,4 @@
-# Read and write functions
+# Read and Write Functions
 
 <br>
 
@@ -20,7 +20,7 @@
 
 <br>
 
-### Data utility functions
+## Data utility functions
 
 <br>
 
