@@ -1,6 +1,14 @@
 # cmos-noise-map
 
-## Code documentation
+## Workflow 1
+
+The default way that the RTS map maker makes a noise map is by taking the standard deviation of the input bias images. 
+The standard deviation is taken along the 0th axis i.e. the resultant map has the same shape of the input images, and 
+each element is the standard deviation of a single pixel, across each of the bias images.
+
+## Workflow 2
+
+## Workflow 3
 
 ### Main wrapper function
 
@@ -60,56 +68,3 @@
 ```
 
 <br>
-
-
-### Read and write functions
-
-<br>
-
-```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.read_write_utils.read_bias_frames
-```
-
-<br><br>
-
-```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.read_write_utils.write_file
-```
-
-<br><br>
-
-```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.read_write_utils.read_parameter_table
-```
-
-<br>
-
-### Data utility functions
-
-<br>
-
-```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.data_utils.data_to_pixel
-```
-
-<br><br>
-
-```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.data_utils.qc_input
-```
-
-<br>
-
-## The Code Playground
-
-<br>
-
-```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.get_rts_playground.plot_get_rts
-```
-
-<br><br>
-
-```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.get_rts_playground.noise_distribution
-```
