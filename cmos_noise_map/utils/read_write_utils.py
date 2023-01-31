@@ -9,6 +9,8 @@ from astropy.io import fits
 from glob import glob
 import numpy as np
 import pandas as pd
+import os
+import tempfile
 
 from cmos_noise_map.utils.data_utils import qc_input
 
@@ -31,9 +33,19 @@ def read_bias_frames(path: str, data_ext=0):
     """
     # Assumes trimmed and processed bias frames
     files = glob(path + str("*.fits"), recursive=True)
-    images = [
-        fits.open(f, memmap=True, do_not_scale_image_data=True) for f in files
-    ]  # Doesn't work unless not scaled
+    if len(files)==0:
+        images = []
+        files = glob(path + str("*.fz"), recursive=True)
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            for file in files:
+                print(tmpdirname)
+                output_filename = os.path.join(tmpdirname, file)
+                os.system('funpack -O {0} {1}'.format(output_filename, file))
+                images.append(fits.open(output_filename, memmap=True, do_not_scale_image_data=True))
+    else:
+        images = [
+            fits.open(f, memmap=True, do_not_scale_image_data=True) for f in files
+        ]  # Doesn't work unless not scaled
     qc_input(images)
     images = np.array(images)[:, 0]
     return images
