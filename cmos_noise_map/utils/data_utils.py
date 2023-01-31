@@ -31,13 +31,16 @@ def data_to_pixel(data):
     pixels = np.reshape(np.transpose(data), (1 * data_shape[1], data_shape[0]))
     return pixels
 
+
 class UnequalDataShape(Exception):
     "Raised when the input shapes are not the same"
     pass
 
+
 class NotEnoughData(Exception):
     "Raised when there are not enough input images"
     pass
+
 
 def qc_input(images):
     """
@@ -48,13 +51,12 @@ def qc_input(images):
 
     num_files = len(images)
     if num_files <= 50:
-        print('Must have at least 50 images as input.')
+        print("Must have at least 50 images as input.")
         raise NotEnoughData()
         sys.exit(1)
 
-
     shapes = [np.shape(i) for i in images]
     if len(set(shapes)) != 1:
-        print('Input images must all have the same shape.')
+        print("Input images must all have the same shape.")
         raise UnequalDataShape()
         sys.exit(1)

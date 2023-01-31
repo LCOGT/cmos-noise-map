@@ -14,6 +14,7 @@ import tempfile
 
 from cmos_noise_map.utils.data_utils import qc_input
 
+
 def read_bias_frames(path: str, data_ext=0):
     """
     A function to open up fits files with memory mapping.
@@ -33,17 +34,23 @@ def read_bias_frames(path: str, data_ext=0):
     """
     # Assumes trimmed and processed bias frames
     files = glob(path + str("*.fits"), recursive=True)
-    if len(files)==0:
+    if len(files) == 0:
         images = []
         with tempfile.TemporaryDirectory() as tmpdirname:
             file_names = glob(path + str("*.fz"), recursive=True)
             for filename in file_names:
-                base_filename, file_extension = os.path.splitext(os.path.basename(filename))
+                base_filename, file_extension = os.path.splitext(
+                    os.path.basename(filename)
+                )
                 print(tmpdirname)
                 output_filename = os.path.join(tmpdirname, base_filename)
                 print(output_filename)
-                os.system('funpack -O {0} {1}'.format(output_filename, filename))
-                images.append(fits.open(output_filename, memmap=True, do_not_scale_image_data=True))
+                os.system("funpack -O {0} {1}".format(output_filename, filename))
+                images.append(
+                    fits.open(
+                        output_filename, memmap=True, do_not_scale_image_data=True
+                    )
+                )
     else:
         images = [
             fits.open(f, memmap=True, do_not_scale_image_data=True) for f in files
