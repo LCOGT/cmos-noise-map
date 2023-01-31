@@ -35,12 +35,14 @@ def read_bias_frames(path: str, data_ext=0):
     files = glob(path + str("*.fits"), recursive=True)
     if len(files)==0:
         images = []
-        files = glob(path + str("*.fz"), recursive=True)
         with tempfile.TemporaryDirectory() as tmpdirname:
-            for file in files:
+            file_names = glob(path + str("*.fz"), recursive=True)
+            for filename in file_names:
+                base_filename, file_extension = os.path.splitext(os.path.basename(filename))
                 print(tmpdirname)
-                output_filename = os.path.join(tmpdirname, file)
-                os.system('funpack -O {0} {1}'.format(output_filename, file))
+                output_filename = os.path.join(tmpdirname, base_filename)
+                print(output_filename)
+                os.system('funpack -O {0} {1}'.format(output_filename, filename))
                 images.append(fits.open(output_filename, memmap=True, do_not_scale_image_data=True))
     else:
         images = [
