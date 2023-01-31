@@ -6,6 +6,7 @@ Created on Tue Jan 24 16:06:54 2023
 @author: Prerana Kottapalli
 """
 import numpy as np
+import sys
 
 
 # Assumes that the data is being read into the system in order.
@@ -44,15 +45,16 @@ def qc_input(images):
     This is used in read_bias_frames
 
     """
-    try:
-        num_files = len(images)
-        if num_files <= 50:
-            raise NotEnoughData()
-    except NotEnoughData:
+
+    num_files = len(images)
+    if num_files <= 50:
         print('Must have at least 50 images as input.')
-    try:
-        shapes = [np.shape(i) for i in images]
-        if len(set(shapes)) != 1:
-            raise UnequalDataShape()
-    except UnequalDataShape:
+        raise NotEnoughData()
+        sys.exit(1)
+
+
+    shapes = [np.shape(i) for i in images]
+    if len(set(shapes)) != 1:
         print('Input images must all have the same shape.')
+        raise UnequalDataShape()
+        sys.exit(1)
