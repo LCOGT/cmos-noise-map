@@ -42,7 +42,7 @@ class NotEnoughDataException(Exception):
     pass
 
 
-def qc_input(images):
+def check_input_data(images):
     """
     Ensure that data is all the same shape, and that there are at least 50 files.
     This is used in read_bias_frames

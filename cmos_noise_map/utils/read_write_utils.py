@@ -13,7 +13,7 @@ import pandas as pd
 import os
 import tempfile
 
-from cmos_noise_map.utils.data_utils import qc_input
+from cmos_noise_map.utils.data_utils import check_input_data
 
 def read_bias_frames(path: str, data_ext=0):
     """
@@ -37,8 +37,8 @@ def read_bias_frames(path: str, data_ext=0):
     if len(files) == 0:
         images = []
         with tempfile.TemporaryDirectory() as tmpdirname:
-            file_names = glob(os.path.join(path + "*.fz"), recursive=True)
-            for filename in file_names:
+            filenames = glob(os.path.join(path + "*.fz"), recursive=True)
+            for filename in filenames:
                 base_filename, file_extension = os.path.splitext(
                     os.path.basename(filename)
                 )
@@ -53,7 +53,7 @@ def read_bias_frames(path: str, data_ext=0):
         images = [
             fits.open(f, memmap=True, do_not_scale_image_data=True) for f in files
         ]  # Doesn't work unless not scaled
-    qc_input(images)
+    check_input_data(images)
     images = np.array(images)[:, 0]
     return images
 
