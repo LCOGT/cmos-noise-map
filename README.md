@@ -12,6 +12,7 @@ Read the docs: https://cmos-noise-map.readthedocs.io/en/latest/index.html
 To install the tool, clone this repository and run:
 
 ```
+pip install poetry
 cd cmos-noise-map
 poetry install
 ```
