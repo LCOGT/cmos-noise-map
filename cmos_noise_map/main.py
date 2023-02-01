@@ -46,7 +46,7 @@ from cmos_noise_map.map_maker import STDMapMaker, RTSMapMaker, RTSParameterMapMa
 @click.option(
     "--out_hdu_name",
     "-o",
-    default='PRIMARY',
+    default="PRIMARY",
     type=str,
     help="Name for the header in which the data will be stored",
 )
@@ -88,11 +88,10 @@ def cli(ctx: click.core.Context, **kwargs):
     filename = args_dict["filename"]
     hdu_name = args_dict["out_hdu_name"]
     fpack = args_dict["fpack"]
-    if fpack==True:
-        write_file(readnoise_map, filename, hdu_name, fpack, data_types[method])    
+    if fpack == True:
+        write_file(readnoise_map, filename, hdu_name, fpack, data_types[method])
     else:
         write_file(readnoise_map, filename, hdu_name, fpack, data_types[method])
-    
 
 
 if __name__ == "__main__":

@@ -15,6 +15,7 @@ import tempfile
 
 from cmos_noise_map.utils.data_utils import check_input_data
 
+
 def read_bias_frames(path: str, data_ext=0):
     """
     A function to open up fits files with memory mapping.
@@ -57,7 +58,10 @@ def read_bias_frames(path: str, data_ext=0):
     images = np.array(images)[:, 0]
     return images
 
-def pack(uncompressed_hdulist: fits.HDUList, lossless_extensions: Iterable) -> fits.HDUList:
+
+def pack(
+    uncompressed_hdulist: fits.HDUList, lossless_extensions: Iterable
+) -> fits.HDUList:
     """
     Refer to https://github.com/LCOGT/banzai/blob/master/banzai/utils/fits_utils.py#L217
 
@@ -67,17 +71,23 @@ def pack(uncompressed_hdulist: fits.HDUList, lossless_extensions: Iterable) -> f
         hdulist = [primary_hdu]
     else:
         primary_hdu = fits.PrimaryHDU()
-        if uncompressed_hdulist.header['EXTNAME'] in lossless_extensions:
+        if uncompressed_hdulist.header["EXTNAME"] in lossless_extensions:
             quantize_level = 1e9
         else:
             quantize_level = 64
-        compressed_hdu = fits.CompImageHDU(data=np.ascontiguousarray(uncompressed_hdulist.data),
-                                           header=uncompressed_hdulist.header, quantize_level=quantize_level,
-                                           quantize_method=1)
+        compressed_hdu = fits.CompImageHDU(
+            data=np.ascontiguousarray(uncompressed_hdulist.data),
+            header=uncompressed_hdulist.header,
+            quantize_level=quantize_level,
+            quantize_method=1,
+        )
         hdulist = [primary_hdu, compressed_hdu]
     return fits.HDUList(hdulist)
 
-def write_file(data, filename: str, hduname: str = 'PRIMARY', fpack = True, data_type="image"):
+
+def write_file(
+    data, filename: str, hduname: str = "PRIMARY", fpack=True, data_type="image"
+):
     """
     A function to write an output file depending on which method was used to generate it.
 
@@ -101,11 +111,23 @@ def write_file(data, filename: str, hduname: str = 'PRIMARY', fpack = True, data
         hdr = fits.Header()
         hdr["EXTNAME"] = hduname
         hdu = fits.PrimaryHDU(data, header=hdr)
-        if fpack==True:
-            filename = os.path.join(os.path.dirname('~/test'), os.path.splitext(os.path.basename(filename))[0])+".fits.fz"
-            hdu = pack(hdu, [f'{hduname}'])
+        if fpack == True:
+            filename = (
+                os.path.join(
+                    os.path.dirname("~/test"),
+                    os.path.splitext(os.path.basename(filename))[0],
+                )
+                + ".fits.fz"
+            )
+            hdu = pack(hdu, [f"{hduname}"])
         else:
-            filename = os.path.join(os.path.dirname('~/test'), os.path.splitext(os.path.basename(filename))[0])+".fits"
+            filename = (
+                os.path.join(
+                    os.path.dirname("~/test"),
+                    os.path.splitext(os.path.basename(filename))[0],
+                )
+                + ".fits"
+            )
         hdu.writeto(filename, overwrite=True)
     elif data_type == "table":
         filename = os.path.join(filename, ".csv")
