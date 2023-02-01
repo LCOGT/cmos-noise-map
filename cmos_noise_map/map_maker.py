@@ -63,7 +63,7 @@ class STDMapMaker(MapMaker):
             array where each element is the readnoise associated with that pixel.
 
         """
-        with click.progressbar(range(0, self.data_shape[0])) as bar:
+        with click.progressbar(range(0, 1)) as bar:#self.data_shape[0])) as bar:
             for row_no in bar:
                 data = []
                 for im in self.images:
