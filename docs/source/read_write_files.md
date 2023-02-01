@@ -31,7 +31,7 @@
 <br><br>
 
 ```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.data_utils.qc_input
+.. autofunction:: cmos_noise_map.utils.data_utils.check_input_data
 ```
 
 <br>
