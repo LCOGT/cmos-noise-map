@@ -6,11 +6,14 @@ Created on Tue Jan 24 13:42:45 2023
 @author: Prerana Kottapalli
 """
 from astropy.io import fits
+from collections.abc import Iterable
 from glob import glob
 import numpy as np
 import pandas as pd
+import os
+import tempfile
 
-from cmos_noise_map.utils.data_utils import qc_input
+from cmos_noise_map.utils.data_utils import check_input_data
 
 def read_bias_frames(path: str, data_ext=0):
     """
@@ -30,16 +33,51 @@ def read_bias_frames(path: str, data_ext=0):
 
     """
     # Assumes trimmed and processed bias frames
-    files = glob(path + str("*.fits"), recursive=True)
-    images = [
-        fits.open(f, memmap=True, do_not_scale_image_data=True) for f in files
-    ]  # Doesn't work unless not scaled
-    qc_input(images)
+    files = glob(os.path.join(path + "*.fits"), recursive=True)
+    if len(files) == 0:
+        images = []
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            filenames = glob(os.path.join(path + "*.fz"), recursive=True)
+            for filename in filenames:
+                base_filename, file_extension = os.path.splitext(
+                    os.path.basename(filename)
+                )
+                output_filename = os.path.join(tmpdirname, base_filename)
+                os.system("funpack -O {0} {1}".format(output_filename, filename))
+                images.append(
+                    fits.open(
+                        output_filename, memmap=True, do_not_scale_image_data=True
+                    )
+                )
+    else:
+        images = [
+            fits.open(f, memmap=True, do_not_scale_image_data=True) for f in files
+        ]  # Doesn't work unless not scaled
+    check_input_data(images)
     images = np.array(images)[:, 0]
     return images
 
+def pack(uncompressed_hdulist: fits.HDUList, lossless_extensions: Iterable) -> fits.HDUList:
+    """
+    Refer to https://github.com/LCOGT/banzai/blob/master/banzai/utils/fits_utils.py#L217
 
-def write_file(data, filename: str, hduname: str = None, data_type="image"):
+    """
+    if uncompressed_hdulist.data is None:
+        primary_hdu = fits.PrimaryHDU(header=uncompressed_hdulist[0].header)
+        hdulist = [primary_hdu]
+    else:
+        primary_hdu = fits.PrimaryHDU()
+        if uncompressed_hdulist.header['EXTNAME'] in lossless_extensions:
+            quantize_level = 1e9
+        else:
+            quantize_level = 64
+        compressed_hdu = fits.CompImageHDU(data=np.ascontiguousarray(uncompressed_hdulist.data),
+                                           header=uncompressed_hdulist.header, quantize_level=quantize_level,
+                                           quantize_method=1)
+        hdulist = [primary_hdu, compressed_hdu]
+    return fits.HDUList(hdulist)
+
+def write_file(data, filename: str, hduname: str = 'PRIMARY', fpack = True, data_type="image"):
     """
     A function to write an output file depending on which method was used to generate it.
 
@@ -60,13 +98,17 @@ def write_file(data, filename: str, hduname: str = None, data_type="image"):
 
     """
     if data_type == "image":
-        filename = filename + ".fits"
         hdr = fits.Header()
-        hdr["NAME"] = hduname
+        hdr["EXTNAME"] = hduname
         hdu = fits.PrimaryHDU(data, header=hdr)
+        if fpack==True:
+            filename = os.path.join(os.path.dirname('~/test'), os.path.splitext(os.path.basename(filename))[0])+".fits.fz"
+            hdu = pack(hdu, [f'{hduname}'])
+        else:
+            filename = os.path.join(os.path.dirname('~/test'), os.path.splitext(os.path.basename(filename))[0])+".fits"
         hdu.writeto(filename, overwrite=True)
     elif data_type == "table":
-        filename = filename + ".csv"
+        filename = os.path.join(filename, ".csv")
         means = []
         covariances = []
         num_peaks = []
@@ -111,14 +153,14 @@ def read_parameter_table(csv_file):
         DESCRIPTION: The weights of each gaussian in the mixture. All weights sum to 1.
 
     """
-    gmm_df = pd.read_csv(csv_file, header=0)
-    means = gmm_df["Means"]
-    var = gmm_df["Covariances"]
+    df = pd.read_csv(csv_file, header=0)
+    means = df["Means"]
+    var = df["Covariances"]
     num_peaks = []
-    for i in gmm_df["Number of Peaks"]:
-        if not np.isnan(i):
-            num_peaks.append(int(i))
+    for elem in df["Number of Peaks"]:
+        if not np.isnan(elem):
+            num_peaks.append(int(elem))
         else:
             num_peaks.append(np.nan)
-    amps = gmm_df["Mixture Weights"]
+    amps = df["Mixture Weights"]
     return means, var, num_peaks, amps
