@@ -88,7 +88,7 @@ def cli(ctx: click.core.Context, **kwargs):
     filename = args_dict["filename"]
     hdu_name = args_dict["out_hdu_name"]
     fpack = args_dict["fpack"]
-    if fpack == True:
+    if fpack is True:
         write_file(readnoise_map, filename, hdu_name, fpack, data_types[method])
     else:
         write_file(readnoise_map, filename, hdu_name, fpack, data_types[method])

@@ -57,19 +57,19 @@ def test_get_rts():
     for i in means:
         if not np.isnan(i).all():
             test_means.append(i.flatten())
-    if len(true_means) == len(test_means) and num_peak_test == True:
+    if len(true_means) == len(test_means) and num_peak_test is True:
         for i in range(len(true_means)):
             test_bools = np.isclose(
                 np.sort(true_means[i]), np.sort(test_means[i]), atol=6
             )
             # 6 chosen so that fake data passes tests, and because it is less than min peak separation.
-            if test_bools.all() == True:
+            if test_bools.all():
                 means_test = True
             else:
                 means_test = False
 
     # Both tests need to pass for overall pass
-    assert num_peak_test == True and means_test == True
+    assert num_peak_test and means_test
 
 
 def test_readnoise():
