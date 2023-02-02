@@ -288,7 +288,7 @@ class noise_distribution():
     
         plt.style.use("default")
         hist_data = self.stdimage.flatten()
-        fig, ax = plt.subplots(1, 2, dpi=200, figsize=(15, 5))
+        fig, ax = plt.subplots(1, 1, dpi=200, figsize=(15, 5))
         ax.hist(
             hist_data,
             density=True,
