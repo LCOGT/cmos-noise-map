@@ -20,6 +20,7 @@ pandas = "^1.5.3"
 sphinx = ">=4,<6"
 myst-parser = "^0.18.1"
 nbsphinx = "^0.8.12"
+pandoc = "^2.3"
 
 [tool.poetry.extras]
 docs=["sphinx"]
