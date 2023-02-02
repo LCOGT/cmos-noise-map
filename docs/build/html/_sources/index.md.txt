@@ -11,8 +11,9 @@
 
 code
 algorithm
-playground
 future-directions
+playground_demo
+
 ```
 
 ## About this project
