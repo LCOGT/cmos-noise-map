@@ -13,11 +13,15 @@ from data_utils import data_to_pixel
 from matplotlib.offsetbox import AnchoredText
 
 class plot_get_rts():
-    def __init__(self, images, start_row=0, end_row=1, start_column=None, end_column=None):
-        self.data_shape = np.shape(images[0].data)
+    def __init__(self, images, data_ext=0, start_row=0, end_row=1, start_column=None, end_column=None):
+        self.data_shape = np.shape(images[data_ext].data)
         self.stdimage = np.zeros(self.data_shape)
-        self.bzero = images[0].header['BZERO']
-        self.bscale = images[0].header['BSCALE']
+        try:
+            self.bzero = images[0].header['BZERO']
+            self.bscale = images[0].header['BSCALE']
+        except KeyError:
+            self.bzero = 0
+            self.bscale = 1
         self.pixels = []    
         for row_no in np.arange(start_row, end_row):
             data = []
@@ -243,11 +247,15 @@ class noise_distribution():
     A plot that shows the noise distribution on the detector.
 
     """
-    def __init__(self, images, gain=None):
-        self.data_shape = np.shape(images[0].data)
+    def __init__(self, images, gain=None, data_ext=0):
+        self.data_shape = np.shape(images[data_ext].data)
         self.stdimage = np.zeros(self.data_shape)
-        self.bzero = images[0].header['BZERO']
-        self.bscale = images[0].header['BSCALE']
+        try:
+            self.bzero = images[0].header['BZERO']
+            self.bscale = images[0].header['BSCALE']
+        except KeyError:
+            self.bzero = 0
+            self.bscale = 1
         for row_no in range(0,self.data_shape[0]):
             data = []
             for im in images:
