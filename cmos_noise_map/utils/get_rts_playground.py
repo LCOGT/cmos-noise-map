@@ -298,8 +298,8 @@ class noise_distribution():
         )
         ax.vlines(median, 0, 5.5, color="#BB0A21", linestyle="--", alpha=0.8)
         ax.vlines(upper_q, 0, 0.75, color="#BB0A21", linestyle="--", alpha=0.8)
-        ax.text(1.25, 5.25, f"Median = {median}", fontsize=12, fontname="Roboto")
-        ax.text(1.5, 0.5, f"90th pct = {upper_q}", fontsize=12, fontname="Roboto")
+        ax.text(median+0.5, 5.25, f"Median = {median}", fontsize=12, fontname="Roboto")
+        ax.text(upper_q+0.5, 0.5, f"90th pct = {upper_q}", fontsize=12, fontname="Roboto")
         ax.set_title(
             "Distribution of Per Pixel Noise", fontname="Libre Franklin", fontsize=20
         )
