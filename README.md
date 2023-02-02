@@ -1,4 +1,6 @@
 # CMOS Noise Map
+[![Python application](https://github.com/LCOGT/cmos-noise-map/actions/workflows/python-app.yml/badge.svg)](https://github.com/LCOGT/cmos-noise-map/actions/workflows/python-app.yml)
+
 Code to model random telegraph noise in a CMOS detector. Originally designed for the Las Cumbres Observatory BANZAI pipeline.
 Authors: Prerana Kottapalli, Matt Daily, Curtis McCully
 
@@ -12,6 +14,7 @@ Read the docs: https://cmos-noise-map.readthedocs.io/en/latest/index.html
 To install the tool, clone this repository and run:
 
 ```
+pip install poetry
 cd cmos-noise-map
 poetry install
 ```
