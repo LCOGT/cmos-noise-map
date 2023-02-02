@@ -246,7 +246,7 @@ def plot_get_rts(p, tol=5, upper_q=3, min_peak_sep=10):
 
 
 # -------------------------------------------
-def noise_distribution(data, gain=None):
+class noise_distribution():
     """
     This function plots the noise distribution of the detector, This is obtained
     by taking the standard deviation of the values of a single pixel across images,
@@ -267,45 +267,55 @@ def noise_distribution(data, gain=None):
     A plot that shows the noise distribution on the detector.
 
     """
-    if gain:
-        stdimage = np.std(data, axis=0) * gain
-    else:
-        stdimage = np.std(data, axis=0)
-
-    upper_q = np.quantile(stdimage, 0.90)
-    median = np.median(stdimage)
-    std = scipy.stats.median_abs_deviation(stdimage, axis=None)
-
-    plt.style.use("default")
-    hist_data = stdimage.flatten()
-    fig, ax = plt.subplots(1, 2, dpi=200, figsize=(15, 5))
-    ax.hist(
-        hist_data,
-        density=True,
-        bins=1000,
-        range=[median - 5 * std, median + 7 * std],
-        color="#252627",
-    )
-    ax.vlines(median, 0, 5.5, color="#BB0A21", linestyle="--", alpha=0.8)
-    ax.vlines(upper_q, 0, 0.75, color="#BB0A21", linestyle="--", alpha=0.8)
-    ax.text(1.25, 5.25, f"Median = {median}", fontsize=12, fontname="Roboto")
-    ax.text(1.5, 0.5, f"90th pct = {upper_q}", fontsize=12, fontname="Roboto")
-    ax.set_title(
-        "Distribution of Per Pixel Noise", fontname="Libre Franklin", fontsize=20
-    )
-    ax.set_xlabel("Per pixel noise", fontname="Cantarell")
-    ax.tick_params(axis="x", which="minor", length=2)
-
-    for label in ax.get_xticklabels():
-        label.set_fontproperties("Roboto")
-    for label in ax.get_yticklabels():
-        label.set_fontproperties("Roboto")
-    ax.grid(True, alpha=0.1)
-    ax.minorticks_on()
-    ax.set_facecolor("#FFF9FB")
-    fig.patch.set_facecolor("#FFF9FB")
-    spine_names = ("top", "right", "left", "bottom")
-    for spine_name in spine_names:
-        ax.spines[spine_name].set_edgecolor("#D3D4D9")
-    ax.spines["top"].set_edgecolor("#D3D4D9")
-    fig.show()
+    def __init__(self, images, gain=None):
+        self.data_shape = np.shape(images[0].data)
+        self.stdimage = np.zeros(self.data_shape)
+        self.bzero = images[0].header['BZERO']
+        self.bscale = images[0].header['BSCALE']
+        for row_no in range(0,self.data_shape[0]):
+            data = []
+            for im in images:
+                data.append((im.data[row_no, :] + self.bzero)*self.bscale)
+            if gain:
+                self.stdimage[row_no, :] = np.std(data, axis=0) * gain
+            else:
+                self.stdimage[row_no, :] = np.std(data, axis=0)
+    
+    def noise_distribution_plot(self, upper_quantile=0.90, bins=1000):
+        upper_q = np.quantile(self.stdimage, upper_quantile)
+        median = np.median(self.stdimage)
+        std = scipy.stats.median_abs_deviation(self.stdimage, axis=None)
+    
+        plt.style.use("default")
+        hist_data = self.stdimage.flatten()
+        fig, ax = plt.subplots(1, 2, dpi=200, figsize=(15, 5))
+        ax.hist(
+            hist_data,
+            density=True,
+            bins=bins,
+            range=[median - 5 * std, median + 7 * std],
+            color="#252627",
+        )
+        ax.vlines(median, 0, 5.5, color="#BB0A21", linestyle="--", alpha=0.8)
+        ax.vlines(upper_q, 0, 0.75, color="#BB0A21", linestyle="--", alpha=0.8)
+        ax.text(1.25, 5.25, f"Median = {median}", fontsize=12, fontname="Roboto")
+        ax.text(1.5, 0.5, f"90th pct = {upper_q}", fontsize=12, fontname="Roboto")
+        ax.set_title(
+            "Distribution of Per Pixel Noise", fontname="Libre Franklin", fontsize=20
+        )
+        ax.set_xlabel("Per pixel noise", fontname="Cantarell")
+        ax.tick_params(axis="x", which="minor", length=2)
+    
+        for label in ax.get_xticklabels():
+            label.set_fontproperties("Roboto")
+        for label in ax.get_yticklabels():
+            label.set_fontproperties("Roboto")
+        ax.grid(True, alpha=0.1)
+        ax.minorticks_on()
+        ax.set_facecolor("#FFF9FB")
+        fig.patch.set_facecolor("#FFF9FB")
+        spine_names = ("top", "right", "left", "bottom")
+        for spine_name in spine_names:
+            ax.spines[spine_name].set_edgecolor("#D3D4D9")
+        ax.spines["top"].set_edgecolor("#D3D4D9")
+        fig.show()
