@@ -5,12 +5,12 @@ package:
   version: {{ 1.1.0 }}
 
 source:
-  url: ../cmos_noise_map
+  path: ../
 
 build:
   noarch: python
   number: 0
-  script: python3 -m pip install --no-deps --ignore-installed cmos-noise-map
+  script: python3 -m pip install --no-deps --ignore-installed .
 
 requirements:
   run:

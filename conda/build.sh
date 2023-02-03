@@ -1,1 +1,1 @@
-python3 -m pip install --no-deps --ignore-installed https://github.com/LCOGT/cmos-noise-map.git
+pwd
