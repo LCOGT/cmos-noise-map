@@ -2,7 +2,7 @@
 
 package:
   name: cmos_noise_map
-  version: {{ 0.1.0 }}
+  version: {{ 1.1.0 }}
 
 source:
   url: ../cmos_noise_map
@@ -10,29 +10,20 @@ source:
 build:
   noarch: python
   number: 0
-  script: python -m pip install --no-deps --ignore-installed .
+  script: python3 -m pip install --no-deps --ignore-installed cmos-noise-map
 
 requirements:
-  host:
-    - python
-    - pip
   run:
     - python
-    - astropy >=5.2.1
-    - numpy >=1.24.1
-    - scipy >=1.10.0
-    - glob2 >=0.7
-    - pytest >=7.2.1
-    - scikit-learn >=1.2.1
-    - click >=8.1.3
-    - matplotlib >=3.6.3
-    - pandas >=1.5.3
-    - sphinx >=4,<6
-    - myst-parser >=0.18.1
-    - nbsphinx >=0.8.12
-    - pandoc >=2.3
-    - ipython >=8.9.0
-
-test:
-  imports:
-    - cmos_noise_map
+    - pip
+    - python
+    - astropy
+    - numpy
+    - scipy
+    - glob2
+    - pytest
+    - scikit-learn
+    - click
+    - matplotlib
+    - pandas
+    - sphinx

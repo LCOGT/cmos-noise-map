@@ -1,1 +1,1 @@
-$PYTHON setup.py install    # Python command to install the script
+python3 -m pip install --no-deps --ignore-installed https://github.com/LCOGT/cmos-noise-map.git

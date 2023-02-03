@@ -32,3 +32,6 @@ rts-maker = "cmos_noise_map.main:cli"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry2conda]
+name = "conda-env"

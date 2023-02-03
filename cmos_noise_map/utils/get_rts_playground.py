@@ -227,26 +227,6 @@ class plot_get_rts():
 
 
 class noise_distribution():
-    """
-    This function plots the noise distribution of the detector, This is obtained
-    by taking the standard deviation of the values of a single pixel across images,
-    for every pixel. Then these standard deviations are represented in histogram form
-    with lines at the median and 90th percentile. This tool is meant to help
-    determine the upper cutoff value for
-
-    Parameters
-    ----------
-    data : stack of opened bias frames
-        DESCRIPTION. A shape (N, X, Y) array where N is the number of images, X is the number of rows of pixels
-        and Y is the number of columns of pixels.
-    gain : float, optional
-        DESCRIPTION. The gain setting of the detector. The default is None.
-
-    Returns
-    -------
-    A plot that shows the noise distribution on the detector.
-
-    """
     def __init__(self, images, gain=None, data_ext=0):
         self.data_shape = np.shape(images[data_ext].data)
         self.stdimage = np.zeros(self.data_shape)
@@ -266,6 +246,26 @@ class noise_distribution():
                 self.stdimage[row_no, :] = np.std(data, axis=0)
     
     def noise_distribution_plot(self, upper_quantile=0.90, bins=1000):
+        """
+        This function plots the noise distribution of the detector, This is obtained
+        by taking the standard deviation of the values of a single pixel across images,
+        for every pixel. Then these standard deviations are represented in histogram form
+        with lines at the median and 90th percentile. This tool is meant to help
+        determine the upper cutoff value for
+
+        Parameters
+        ----------
+        data : stack of opened bias frames
+            DESCRIPTION. A shape (N, X, Y) array where N is the number of images, X is the number of rows of pixels
+            and Y is the number of columns of pixels.
+        gain : float, optional
+            DESCRIPTION. The gain setting of the detector. The default is None.
+
+        Returns
+        -------
+        A plot that shows the noise distribution on the detector.
+
+        """
         upper_q = np.quantile(self.stdimage, upper_quantile)
         median = np.median(self.stdimage)
         std = scipy.stats.median_abs_deviation(self.stdimage, axis=None)
