@@ -1,6 +1,8 @@
 # CMOS Noise Map
 [![Python application](https://github.com/LCOGT/cmos-noise-map/actions/workflows/python-app.yml/badge.svg)](https://github.com/LCOGT/cmos-noise-map/actions/workflows/python-app.yml)
 
+[![Documentation Status](https://readthedocs.org/projects/cmos-noise-map/badge/?version=latest)](https://cmos-noise-map.readthedocs.io/en/latest/?badge=latest)
+
 Code to model random telegraph noise in a CMOS detector. Originally designed for the Las Cumbres Observatory BANZAI pipeline.
 Authors: Prerana Kottapalli, Matt Daily, Curtis McCully
 
