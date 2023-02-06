@@ -10,7 +10,9 @@ Read the docs: https://cmos-noise-map.readthedocs.io/en/latest/index.html
 
 ## Installation
 ### From PyPi
-¯\_(ツ)_/¯ Not on Pypi yet
+```
+pip install cmos-noise-map
+```
 
 ### From Github
 To install the tool, clone this repository and run:
