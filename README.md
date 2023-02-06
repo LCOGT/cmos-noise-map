@@ -56,6 +56,8 @@ Options:
                                   clusters
   -o, --out_hdu_name TEXT         Name for the header in which the data will
                                   be stored
+  -f, --fpack BOOLEAN             Adding this option will fpack your output
+                                  fits file
   --help                          Show this message and exit.
 
 ```
