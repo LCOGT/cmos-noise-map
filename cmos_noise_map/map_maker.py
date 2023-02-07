@@ -49,8 +49,12 @@ class MapMaker:
         self.tolerance = tolerance
         self.upper_quantile = upper_quantile
         self.min_peak_separation = min_peak_seperation
-        self.bzero = self.images[0].header['BZERO']
-        self.bscale = self.images[0].header['BSCALE']
+        try:
+            self.bzero = self.images[0].header['BZERO']
+            self.bscale = self.images[0].header['BSCALE']
+        except KeyError:
+            self.bzero = 0
+            self.bscale = 1
 
 
 class STDMapMaker(MapMaker):
