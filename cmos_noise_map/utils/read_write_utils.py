@@ -16,12 +16,13 @@ import tempfile
 from cmos_noise_map.utils.data_utils import check_input_data
 
 class read_write_utils():
-    def __init__(self, path: str, filename: str, data_ext=0, hduname: str = 'PRIMARY', fpack=True):
+    def __init__(self, path: str, filename: str, data_ext=0, hduname: str = 'READNOISE', fpack=True, method:str = 'std'):
         self.path = path
         self.data_ext = 0
         self.filename = filename
         self.hduname = hduname
         self.fpack = fpack
+        self.method = method
         
     def read_bias_frames(self):
         """
@@ -61,7 +62,7 @@ class read_write_utils():
             self.images = [
                 fits.open(f, memmap=True, do_not_scale_image_data=True)[self.data_ext] for f in files
             ]  # Doesn't work unless not scaled
-        check_input_data(self.images)
+        check_input_data(self.images, self.method)
         self.images = np.array(self.images)
         return self.images
 

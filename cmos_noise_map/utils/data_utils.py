@@ -42,18 +42,26 @@ class NotEnoughDataException(Exception):
     pass
 
 
-def check_input_data(images):
+def check_input_data(images, method):
     """
     Ensure that data is all the same shape, and that there are at least 50 files.
     This is used in read_bias_frames
 
     """
-
-    num_files = len(images)
-    if num_files <= 50:
-        print("Must have at least 50 images as input.")
-        raise NotEnoughDataException()
-        sys.exit(1)
+    
+    if method == 'std':
+        num_files = len(images)
+        if num_files <= 10:
+            print("Must have at least 50 images as input.")
+            raise NotEnoughDataException()
+            sys.exit(1)
+    
+    else:
+        num_files = len(images)
+        if num_files <= 50:
+            print("Must have at least 50 images as input.")
+            raise NotEnoughDataException()
+            sys.exit(1)
 
     shapes = [np.shape(image) for image in images]
     if len(set(shapes)) != 1:
