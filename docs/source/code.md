@@ -80,9 +80,9 @@ rts-maker <input-files-directory> --upper_quantile <float, optional> --tolerance
 Understanding the options here is important. For more information please visit the [page explaining these in detail](algorithm.md), but in brief:
 - `--upper_quantile` is the noisiness cutoff for evaluating pixels. The algorithm does not evaluate every pixel, only pixels whose **standard deviation** is above this cutoff. 
 By default it calculates the cutoff to be the 80th percentile of the standard deviation of all pixels. We **recommend changing the parameter** according to your data.
-Please consider using the [RTS playground](playground.md) to determine this parameter for your data.
+Please consider using the [RTS playground](playground_demo.ipynb) to determine this parameter for your data.
 - `--tolerance: default=0.05` is an overfitting parameter. This is the minimum difference in the quality of fit between a model with 2 gaussians, and a model with 3. This parameter generally does not need to be changed.
-- `--min_peak_separation: default=10` is the minimum separation between two modes in a multimodal pixel noise distribution, for them to be considered separate. Please consider using the [RTS playground](playground.md) to determine this parameter for your data.
+- `--min_peak_separation: default=10` is the minimum separation between two modes in a multimodal pixel noise distribution, for them to be considered separate. Please consider using the [RTS playground](playground_demo.ipynb) to determine this parameter for your data.
 
 The files are read in with memory-mapping in order to not use up memory carrying around data. 
 However, the process is multiprocessed (implemented via [sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.mixture.GaussianMixture.html)), so your CPU will be working hard during this process.
