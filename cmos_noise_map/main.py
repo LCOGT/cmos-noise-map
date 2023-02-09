@@ -53,7 +53,7 @@ from cmos_noise_map.map_maker import STDMapMaker, RTSMapMaker, RTSParameterMapMa
 @click.option(
     "--fpack",
     "-f",
-    default=True,
+    is_flag=True,
     help="Adding this option will fpack your output fits file",
 )
 def cli(ctx: click.core.Context, **kwargs):
