@@ -11,8 +11,9 @@
 
 code
 algorithm
-playground
 future-directions
+playground_demo
+
 ```
 
 ## About this project
@@ -25,7 +26,9 @@ This document has information about why we chose to address the problem of RTS i
 
 ### From PyPi
 
-¯\_(ツ)_/¯ Not on Pypi yet
+```
+pip install cmos-noise-map
+```
 
 ### From GitHub
 
@@ -61,8 +64,9 @@ Options:
                                   clusters
   -o, --out_hdu_name TEXT         Name for the header in which the data will
                                   be stored
+  -f, --fpack BOOLEAN             Adding this option will fpack your output
+                                  fits file
   --help                          Show this message and exit.
-
 ```
 ## Tests
 To run the unit tests, simply run:

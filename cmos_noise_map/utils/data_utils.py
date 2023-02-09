@@ -6,6 +6,7 @@ Created on Tue Jan 24 16:06:54 2023
 @author: Prerana Kottapalli
 """
 import numpy as np
+import sys
 
 
 # Assumes that the data is being read into the system in order.
@@ -30,29 +31,40 @@ def data_to_pixel(data):
     pixels = np.reshape(np.transpose(data), (1 * data_shape[1], data_shape[0]))
     return pixels
 
-class UnequalDataShape(Exception):
+
+class UnequalDataShapeException(Exception):
     "Raised when the input shapes are not the same"
     pass
 
-class NotEnoughData(Exception):
+
+class NotEnoughDataException(Exception):
     "Raised when there are not enough input images"
     pass
 
-def qc_input(images):
+
+def check_input_data(images, method):
     """
     Ensure that data is all the same shape, and that there are at least 50 files.
     This is used in read_bias_frames
 
     """
-    try:
+    
+    if method == 'std':
+        num_files = len(images)
+        if num_files <= 10:
+            print("Must have at least 50 images as input.")
+            raise NotEnoughDataException()
+            sys.exit(1)
+    
+    else:
         num_files = len(images)
         if num_files <= 50:
-            raise NotEnoughData()
-    except NotEnoughData:
-        print('Must have at least 50 images as input.')
-    try:
-        shapes = [np.shape(i) for i in images]
-        if len(set(shapes)) != 1:
-            raise UnequalDataShape()
-    except UnequalDataShape:
-        print('Input images must all have the same shape.')
+            print("Must have at least 50 images as input.")
+            raise NotEnoughDataException()
+            sys.exit(1)
+
+    shapes = [np.shape(image) for image in images]
+    if len(set(shapes)) != 1:
+        print("Input images must all have the same shape.")
+        raise UnequalDataShapeException()
+        sys.exit(1)

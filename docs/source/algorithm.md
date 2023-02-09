@@ -1,26 +1,33 @@
 # Modeling RTS
 
-
-
 ## What is Random Telegraph Signal?
 
-Random Telegraph Signal is the result of a randomly occurring jumps between discrete voltage levels, whose source is the Metal-Oxide Semiconductor Field Effect Transistor (MOSFET) in each pixel in a CMOS sensor.
-RTS shows up in bias frames, and any other time where the incoming signal is very low. This is because the temporal signal or light signal is usually dominant over RTS, which can have a read noise anywhere about 20e- and above.
-Due to correlated double sampling, where the read out value of a pixel is taken as the difference between the activated pixel voltage and the reset voltage, we see a multi-modal distribution of data points:
+The transistor technology in a CMOS detector is typically a field effect transistor (FET), which converts photons to charge in the pixel itself. 
+Those transistors have very thin layers of semiconductor material (intentionally so) with very low operating currents. 
+However, lattice defects can have a significant effect on the voltage to current transformation in those FETs. 
+A well-documented phenomenon of FET transistors is random telegraph noise (RTN), where the measured drain current fluctuates in time among N discrete levels for a constant gate voltage. 
+This fluctuation is driven by lattice defects. Typically there are 2 discrete levels, but more states can be present in a given MOSFET.
 
 ```{eval-rst}
 .. image:: images/pixel_variation.png
     :alt: "Data variation of an RTS affected pixel, showing three different modes of clustering"
 ```
 
-When we take a look at this in histogram form, we can clearly see the trimodal behaviour:
+The conversion from charge to voltage (or, a digital number) is typically achieved with correlated double sampling (CDS), 
+where the pixel output level is measured as the difference between a reset level and the pixel signal (charge) level. 
+The advantage of CDS is that it reduces temporal variations in the offset level of the amplifiers, i.e., it adresses 1/f noise. 
+CDS is also used in CCD detectors, and in both detector types, the output signal is reported as the difference between two measurements.  
+
+In CMOS detectors, CDS is complicated by the fact that each of the two readouts might have one of the two discrete responses to an input level due to RTN: 
+The effect of those two readout levels can either cancel out in CDS (i.e., both reset and signal level were measured in the same RTN state), 
+or systematically shift the result of CDS higher or lower if the reset and signal measurement had different RTN states. 
+This in effect leads to a trimodal distribution of output level for the same input signal level. 
+
 
 ```{eval-rst}
 .. image:: images/RTS-trimodal.png
     :alt: "A histogram of the RTS affected pixel, showing a trimodal distribution"
 ```
-
-We want to investigate all of the pixels so that we can find out more about Random Telegraph Signal behavior.
 
 ## Gaussian Mixture Models and RTS Properties
 
@@ -99,6 +106,17 @@ In doing so, we find the following:
 .. image:: images/bad_pixel_map.png
     :alt: "A map of locations of bad pixels, color coded by modality. There is a zoomed in section in the top left corner of the map showing adjacency of trimodal."
 ```
+
+### Impact on Astronomical Images
+CMOS cameras are not that widely used in astronomy yet, and we want to understand if CMOS peculiarities require seem special treatment in the data processing software. We note:
+
+- The max telegraph noise amplitude of 20e- as seen in the QHY411 is still not relevant for well-exposed stars, as for exposure levels >20e-^2 one would be dominated by shot noise. 
+- Telegraph noise could have an important impact on for low light level sources and precise background estimation. 
+- In particular in undersampled situations, one would watch out for the additional impact of telegraph noise on a single measurement. 
+- Telegraph noise might be most important to treat in calibration images such as bias and darks, as those propagate to all calibrated images. 
+- When binning data, which is an entire software process in COS cameras post-readout, it might be beneficial to initially preserve the full data and then be more sophisticated in binned to flat / exclude/treat high RTN pixels. 
+- Also, as we go to a more sophisticated noise propagation in the data processing, a more sophisticated per-pixel noise description may be useful.
+
 
 ## Error Propagation
 With the means, amplitudes, and covariances of individual gaussians we can follow standard error propagation methods to calculate the read noise of each pixel. This is possible because our model essentially models the probability distribution function of the data.

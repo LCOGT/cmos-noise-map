@@ -3,13 +3,13 @@
 <br>
 
 ```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.read_write_utils.read_bias_frames
+.. autofunction:: cmos_noise_map.utils.read_write_utils.read_write_utils.read_bias_frames
 ```
 
 <br><br>
 
 ```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.read_write_utils.write_file
+.. autofunction:: cmos_noise_map.utils.read_write_utils.read_write_utils.write_file
 ```
 
 <br><br>
@@ -31,7 +31,7 @@
 <br><br>
 
 ```{eval-rst}
-.. autofunction:: cmos_noise_map.utils.data_utils.qc_input
+.. autofunction:: cmos_noise_map.utils.data_utils.check_input_data
 ```
 
 <br>

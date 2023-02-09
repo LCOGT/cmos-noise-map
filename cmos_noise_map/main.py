@@ -7,7 +7,7 @@ Created on Mon Jan 23 11:07:17 2023
 
 import click
 
-from cmos_noise_map.utils.read_write_utils import read_bias_frames, write_file
+from cmos_noise_map.utils.read_write_utils import read_write_utils
 from cmos_noise_map.map_maker import STDMapMaker, RTSMapMaker, RTSParameterMapMaker
 
 
@@ -46,9 +46,15 @@ from cmos_noise_map.map_maker import STDMapMaker, RTSMapMaker, RTSParameterMapMa
 @click.option(
     "--out_hdu_name",
     "-o",
-    default=None,
+    default="READNOISE",
     type=str,
     help="Name for the header in which the data will be stored",
+)
+@click.option(
+    "--fpack",
+    "-f",
+    is_flag=True,
+    help="Adding this option will fpack your output fits file",
 )
 def cli(ctx: click.core.Context, **kwargs):
     """
@@ -68,8 +74,12 @@ def cli(ctx: click.core.Context, **kwargs):
     upper_quantile = args_dict["upper_quantile"]
     tolerance = args_dict["tolerance"]
     min_peak_separation = args_dict["min_peak_separation"]
-
-    images = read_bias_frames(path, data_ext)
+    filename = args_dict["filename"]
+    hdu_name = args_dict["out_hdu_name"]
+    fpack = args_dict["fpack"]
+    
+    read_write = read_write_utils(path=path, filename=filename, data_ext=data_ext, hduname=hdu_name, fpack=fpack, method=method)
+    images = read_write.read_bias_frames()
     methods = {"std": STDMapMaker, "rts": RTSMapMaker, "param": RTSParameterMapMaker}
 
     map_maker_class = methods.get(method)
@@ -79,9 +89,11 @@ def cli(ctx: click.core.Context, **kwargs):
     readnoise_map = map_maker_object.create_map()
 
     data_types = {"std": "image", "rts": "image", "param": "table"}
-    filename = args_dict["filename"]
-    hdu_name = args_dict["out_hdu_name"]
-    write_file(readnoise_map, filename, hdu_name, data_types[method])
+    
+    if fpack is True:
+        read_write.write_file(readnoise_map, fpack, data_types[method])
+    else:
+        read_write.write_file(readnoise_map, fpack, data_types[method])
 
 
 if __name__ == "__main__":
