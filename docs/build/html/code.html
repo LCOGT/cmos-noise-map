@@ -60,7 +60,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="algorithm.html">Modeling RTS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="playground.html">The Code Playground</a></li>
 <li class="toctree-l1"><a class="reference internal" href="future-directions.html">Future Directions</a></li>
 </ul>
 
@@ -155,11 +154,13 @@ This is a faster method than RTSMapMaker, less rigorous statistically but achiev
 </dd></dl>
 
 <br>
+<hr class="docutils" />
 <section id="the-rest-of-the-methods-are-not-used-in-lco-production-code-it-is-for-those-who-are-interested-in-the-modelling-methods-and-results">
 <h4>The rest of the methods are NOT used in LCO production code. It is for those who are interested in the modelling methods and results.<a class="headerlink" href="#the-rest-of-the-methods-are-not-used-in-lco-production-code-it-is-for-those-who-are-interested-in-the-modelling-methods-and-results" title="Permalink to this headline"></a></h4>
 </section>
 </section>
 </section>
+<hr class="docutils" />
 <section id="model-pixel-noise-with-gmm">
 <h2>Model Pixel Noise with GMM<a class="headerlink" href="#model-pixel-noise-with-gmm" title="Permalink to this headline"></a></h2>
 <p>The second way provided by cmos-noise-map to create a read noise map is by using a <a class="reference internal" href="algorithm.html"><span class="doc std std-doc">Gaussian Mixture Model</span></a> to determine the read noise for pixels that are not uniformly distributed.
@@ -177,9 +178,9 @@ This is why this method is not the default. However, the process ideally need on
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--upper_quantile</span></code> is the noisiness cutoff for evaluating pixels. The algorithm does not evaluate every pixel, only pixels whose <strong>standard deviation</strong> is above this cutoff.
 By default it calculates the cutoff to be the 80th percentile of the standard deviation of all pixels. We <strong>recommend changing the parameter</strong> according to your data.
-Please consider using the <a class="reference internal" href="playground.html"><span class="doc std std-doc">RTS playground</span></a> to determine this parameter for your data.</p></li>
+Please consider using the <span class="xref myst">RTS playground</span> to determine this parameter for your data.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--tolerance:</span> <span class="pre">default=0.05</span></code> is an overfitting parameter. This is the minimum difference in the quality of fit between a model with 2 gaussians, and a model with 3. This parameter generally does not need to be changed.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--min_peak_separation:</span> <span class="pre">default=10</span></code> is the minimum separation between two modes in a multimodal pixel noise distribution, for them to be considered separate. Please consider using the <a class="reference internal" href="playground.html"><span class="doc std std-doc">RTS playground</span></a> to determine this parameter for your data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--min_peak_separation:</span> <span class="pre">default=10</span></code> is the minimum separation between two modes in a multimodal pixel noise distribution, for them to be considered separate. Please consider using the <span class="xref myst">RTS playground</span> to determine this parameter for your data.</p></li>
 </ul>
 <p>The files are read in with memory-mapping in order to not use up memory carrying around data.
 However, the process is multiprocessed (implemented via <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.mixture.GaussianMixture.html">sklearn</a>), so your CPU will be working hard during this process.

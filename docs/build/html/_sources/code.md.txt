@@ -67,7 +67,11 @@ Once the map is created, a fits file will be created in the path specified with 
 
 <br>
 
+---
+
 #### The rest of the methods are NOT used in LCO production code. It is for those who are interested in the modelling methods and results.
+
+---
 
 ## Model Pixel Noise with GMM
 
