@@ -12,6 +12,8 @@ import numpy as np
 import pandas as pd
 import os
 import tempfile
+import re
+import sys
 
 from cmos_noise_map.utils.data_utils import check_input_data
 
@@ -120,6 +122,17 @@ class read_write_utils():
         None.
     
         """
+        if not self.filename:
+            try:
+                header = self.images[0].header
+                basenames = re.split('-', header['ORIGNAME'])[:-2]
+                mode = header['CONFMODE']
+                basenames.append('readnoise')
+                basenames.append(mode)
+                self.filename = '-'.join(basenames)
+            except KeyError:
+                print('Unable to write default filename, please provide one')
+                sys.exit(-1)
         if data_type == "image":
             hdr = self.images[0].header
             hdr["EXTNAME"] = self.hduname
@@ -128,7 +141,6 @@ class read_write_utils():
             if fpack is True:
                 filename = (
                     os.path.join(
-                        os.path.dirname("~/test"),
                         os.path.splitext(os.path.basename(self.filename))[0],
                     )
                     + ".fits.fz"
@@ -137,14 +149,13 @@ class read_write_utils():
             else:
                 filename = (
                     os.path.join(
-                        os.path.dirname("~/test"),
-                        os.path.splitext(os.path.basename(filename))[0],
+                        os.path.splitext(os.path.basename(self.filename))[0],
                     )
                     + ".fits"
                 )
             hdu.writeto(filename, overwrite=True)
         elif data_type == "table":
-            filename = os.path.join(filename, ".csv")
+            filename = os.path.join(self.filename, ".csv")
             means = []
             covariances = []
             num_peaks = []

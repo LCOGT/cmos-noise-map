@@ -13,7 +13,7 @@ from cmos_noise_map.map_maker import STDMapMaker, RTSMapMaker, RTSParameterMapMa
 
 @click.command()
 @click.argument("path", required=True, type=click.Path(exists=True))
-@click.argument("filename", required=True, type=click.Path(exists=False))
+@click.argument("filename", required=False, type=click.Path(exists=False))
 @click.argument("method", nargs=1, default="std")
 @click.pass_context
 @click.option(
@@ -62,7 +62,7 @@ def cli(ctx: click.core.Context, **kwargs):
 
     path: Path to input without the .fits at the end
 
-    filename: Path to write file, including the filename ending in .fits
+    filename:OPTIONAL Path to write file, including the filename ending in .fits
 
     method: Default method is std. Available methods are std, rts, and param. See docs for more information about each method.
     """
