@@ -3,7 +3,7 @@ This package was designed to create a read noise map for CMOS sensors, which oft
 
 **Inputs**
 <br>
-The expected inputs are at least **50** bias images which all have **the same shape**. This is so that the resulting outputs are statistically significant, and so that data can be properly handled.
+The expected inputs are bias images which all have **the same shape**.
 
 **Methods**
 <br>
@@ -14,9 +14,11 @@ There are a few utilities that cmos-noise-map provides, two of which are for cre
 3. `param`: Parameter Map
 
 **Outputs**
-If the method selected is either `std` or `rts`, the output file will be a `.fits` data file, in the `'PRIMARY'` or user specified header (by using the option `--out_hdu_name`)
+If the method selected is either `std` or `rts`, the output file will be a `.fits` data file, in the `'READNOISE'` or user specified header (by using the option `--out_hdu_name`)
+<br>
 If the method selected is `param`, the file will be written out as a `.csv` file
-
+<br>
+If the `--fpacked` option is used, the file will have a `.fits.fz` extension. We choose to compress files using fpack because it is lossless.
 <br>
 
 ## Standard Deviation Noise Map [Default]
@@ -24,6 +26,8 @@ If the method selected is `param`, the file will be written out as a `.csv` file
 The default way that the RTS map maker makes a noise map is by taking the standard deviation of the input bias images. 
 The standard deviation is taken along the 0th axis i.e. the resultant map has the same shape of the input images, and 
 each element is the standard deviation of a single pixel, across each of the bias images.
+
+**Input:** A minimum of 10 bias frames with the same shape is required to process the images. The program will abort and exit if this is not the case.
 
 ```{eval-rst}
 .. image:: images/Standard-Deviation.png
@@ -34,7 +38,7 @@ Above is an example of how to take the standard deviation of a pixel across imag
 This is the simplest way to create a read noise map given a bias frame. This method is chosen as the default since it is significantly faster than modelling each pixel and calculating the read noise.
 The results are comparable enough that this is ok.
 
-#### Running the command
+### Running the command
 
 Since this method is the default, we can get away with a simple command:
 
@@ -63,13 +67,17 @@ Once the map is created, a fits file will be created in the path specified with 
 
 <br>
 
+#### The rest of the methods are NOT used in LCO production code. It is for those who are interested in the modelling methods and results.
+
 ## Model Pixel Noise with GMM
 
 The second way provided by cmos-noise-map to create a read noise map is by using a [Gaussian Mixture Model](algorithm.md) to determine the read noise for pixels that are not uniformly distributed.
 This method is a more statistically rigorous way to determine read noise, but the algorithm is very computationally expensive. For a large CMOS sensor with a large amount of data being sampled, the process can take **days**.
 This is why this method is not the default. However, the process ideally need only be run once so users may be interested in using it.
+<br>
+**Input:** A minimum of 50 bias frames with the same shape is required to process the images. The program will abort and exit if this is not the case.
 
-#### Running the command
+### Running the command
 
 The command is formatted as follows:
 
@@ -126,7 +134,7 @@ This is a utility provided by the package for those who might want the parameter
 The method is unchanged from above, we just stop short of calculating read noise, and the file [written out](read_write_files.md) is written as a `csv` file. We provide a utility function to read this csv files in, in a way that can be read by the functions
 in `cmos-noise-map`.
 
-#### Running the Command
+### Running the Command
 
 ```
 rts-maker <input-files-directory> --upper_quantile <float, optional> --tolerance <float, optional> --min_peak_separation <float, optional> <output-file-name-and-path> param
