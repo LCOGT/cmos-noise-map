@@ -17,38 +17,49 @@ import sys
 
 from cmos_noise_map.utils.data_utils import check_input_data
 
-class read_write_utils():
-    def __init__(self, path: str, filename: str, data_ext=0, hduname: str = 'READNOISE', fpack=True, method:str = 'std'):
+
+class read_write_utils:
+    def __init__(
+        self,
+        path: str,
+        filename: str,
+        data_ext=0,
+        hduname: str = "READNOISE",
+        fpack=True,
+        method: str = "std",
+    ):
         self.path = path
         self.data_ext = 0
         self.filename = filename
         self.hduname = hduname
         self.fpack = fpack
         self.method = method
-        
+
     def read_bias_frames(self):
         """
         A function to open up fits files with memory mapping.
-    
+
         Parameters
         ----------
         path : str
             DESCRIPTION. The path to your fits files without the .fits at the end
         data_ext : integer or string, optional
             DESCRIPTION. The default is 0. This is the extension to the data header data unit (hdu) that is to be processed.
-    
+
         Returns
         -------
         ims : array
             DESCRIPTION. And array of opened, memory mapped, fits hdus. Not the data itself.
-    
+
         """
         # Assumes trimmed and processed bias frames
-        files = glob(os.path.join(''.join((self.path, "*.fits"))), recursive=True)
+        files = glob(os.path.join("".join((self.path, "*.fits"))), recursive=True)
         if len(files) == 0:
             self.images = []
             with tempfile.TemporaryDirectory() as tmpdirname:
-                filenames = glob(os.path.join(''.join((self.path, "*.fz"))), recursive=True)
+                filenames = glob(
+                    os.path.join("".join((self.path, "*.fz"))), recursive=True
+                )
                 for filename in filenames:
                     base_filename, file_extension = os.path.splitext(
                         os.path.basename(filename)
@@ -62,20 +73,20 @@ class read_write_utils():
                     )
         else:
             self.images = [
-                fits.open(f, memmap=True, do_not_scale_image_data=True)[self.data_ext] for f in files
+                fits.open(f, memmap=True, do_not_scale_image_data=True)[self.data_ext]
+                for f in files
             ]  # Doesn't work unless not scaled
         check_input_data(self.images, self.method)
         self.images = np.array(self.images)
         return self.images
 
-
-    def pack(self,
-        uncompressed_hdulist: fits.HDUList, lossless_extensions: Iterable
+    def pack(
+        self, uncompressed_hdulist: fits.HDUList, lossless_extensions: Iterable
     ) -> fits.HDUList:
         """
         See:
         https://github.com/LCOGT/banzai/blob/master/banzai/utils/fits_utils.py#L217
-    
+
         """
         if uncompressed_hdulist.data is None:
             primary_hdu = fits.PrimaryHDU(header=uncompressed_hdulist[0].header)
@@ -95,12 +106,11 @@ class read_write_utils():
             hdulist = [primary_hdu, compressed_hdu]
         return fits.HDUList(hdulist)
 
-
-    def write_file(self, data, fpack=True, data_type='image'):
+    def write_file(self, data, fpack=True, data_type="image"):
         """
         A function to write an output file depending on which method was used to
         generate it.
-    
+
         Parameters
         ----------
         data : (NxN array of floats)
@@ -116,34 +126,44 @@ class read_write_utils():
             DESCRIPTION. Type of data to be written out. This is determined by the
             program depending on what method was used. The default is "image". If
             the method used was "param" then the type is "table"
-    
+
         Returns
         -------
         None.
-    
+
         """
         if not self.filename:
             try:
                 header = self.images[0].header
-                basenames = re.split('-', header['ORIGNAME'])[:-2]
-                mode = header['CONFMODE']
-                basenames.append('readnoise')
+                basenames = re.split("-", header["ORIGNAME"])[:-2]
+                mode = header["CONFMODE"]
+                basenames.append("readnoise")
                 basenames.append(mode)
-                self.filename = '-'.join(basenames)
+                self.filename = "-".join(basenames)
             except KeyError:
-                print('Unable to write default filename, please provide one')
+                print("Unable to write default filename, please provide one")
                 sys.exit(-1)
         if data_type == "image":
             hdr = self.images[0].header
             hdr["EXTNAME"] = self.hduname
-            hdr['OBSTYPE'] = 'READNOISE'
+            hdr["OBSTYPE"] = "READNOISE"
             hdu = fits.PrimaryHDU(data, header=hdr)
             if fpack is True:
-                filename = os.path.join(''.join((os.path.splitext(os.path.basename(self.filename))[0], ".fits.fz")))
+                filename = os.path.join(
+                    "".join(
+                        (
+                            os.path.splitext(os.path.basename(self.filename))[0],
+                            ".fits.fz",
+                        )
+                    )
+                )
                 hdu = self.pack(hdu, [f"{self.hduname}"])
             else:
-                filename = (
-                    os.path.join(''.join((os.path.splitext(os.path.basename(self.filename))[0], ".fits"))))
+                filename = os.path.join(
+                    "".join(
+                        (os.path.splitext(os.path.basename(self.filename))[0], ".fits")
+                    )
+                )
             print(filename)
             hdu.writeto(filename, overwrite=True)
         elif data_type == "table":
@@ -157,7 +177,7 @@ class read_write_utils():
                 covariances.append(i[1])
                 num_peaks.append(i[2])
                 gmm_weights.append(i[3])
-    
+
             df = pd.DataFrame(
                 {
                     "Means": means,

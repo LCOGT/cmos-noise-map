@@ -50,8 +50,8 @@ class MapMaker:
         self.upper_quantile = upper_quantile
         self.min_peak_separation = min_peak_seperation
         try:
-            self.bzero = self.images[0].header['BZERO']
-            self.bscale = self.images[0].header['BSCALE']
+            self.bzero = self.images[0].header["BZERO"]
+            self.bscale = self.images[0].header["BSCALE"]
         except KeyError:
             self.bzero = 0
             self.bscale = 1
@@ -73,7 +73,7 @@ class STDMapMaker(MapMaker):
             for row_no in bar:
                 data = []
                 for im in self.images:
-                    data.append((im.data[row_no, :] + self.bzero)*self.bscale)
+                    data.append((im.data[row_no, :] + self.bzero) * self.bscale)
 
                 # convert data to stacked pixels
                 stdimage = np.std(data, axis=0)
@@ -100,7 +100,7 @@ class RTSMapMaker(MapMaker):
             for row_no in bar:
                 data = []
                 for im in self.images:
-                    data.append((im.data[row_no, :] + self.bzero)*self.bscale)
+                    data.append((im.data[row_no, :] + self.bzero) * self.bscale)
 
                 # convert data to stacked pixels
                 pixels = data_to_pixel(data)
@@ -145,7 +145,7 @@ class RTSParameterMapMaker(MapMaker):
             for row_no in bar:
                 data = []
                 for im in self.images:
-                    data.append((im.data[row_no, :] + self.bzero)*self.bscale)
+                    data.append((im.data[row_no, :] + self.bzero) * self.bscale)
 
                 # convert data to stacked pixels
                 pixels = data_to_pixel(data)

@@ -77,8 +77,15 @@ def cli(ctx: click.core.Context, **kwargs):
     filename = args_dict["filename"]
     hdu_name = args_dict["out_hdu_name"]
     fpack = args_dict["fpack"]
-    
-    read_write = read_write_utils(path=path, filename=filename, data_ext=data_ext, hduname=hdu_name, fpack=fpack, method=method)
+
+    read_write = read_write_utils(
+        path=path,
+        filename=filename,
+        data_ext=data_ext,
+        hduname=hdu_name,
+        fpack=fpack,
+        method=method,
+    )
     images = read_write.read_bias_frames()
     methods = {"std": STDMapMaker, "rts": RTSMapMaker, "param": RTSParameterMapMaker}
 
@@ -89,7 +96,7 @@ def cli(ctx: click.core.Context, **kwargs):
     readnoise_map = map_maker_object.create_map()
 
     data_types = {"std": "image", "rts": "image", "param": "table"}
-    
+
     if fpack is True:
         read_write.write_file(readnoise_map, fpack, data_types[method])
     else:

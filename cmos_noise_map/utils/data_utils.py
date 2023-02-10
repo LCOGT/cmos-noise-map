@@ -48,14 +48,14 @@ def check_input_data(images, method):
     This is used in read_bias_frames
 
     """
-    
-    if method == 'std':
+
+    if method == "std":
         num_files = len(images)
         if num_files <= 10:
             print("Must have at least 50 images as input.")
             raise NotEnoughDataException()
             sys.exit(1)
-    
+
     else:
         num_files = len(images)
         if num_files <= 50:
