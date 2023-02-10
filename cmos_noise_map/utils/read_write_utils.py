@@ -44,11 +44,11 @@ class read_write_utils():
     
         """
         # Assumes trimmed and processed bias frames
-        files = glob(os.path.join(self.path + "*.fits"), recursive=True)
+        files = glob(os.path.join(''.join((self.path, "*.fits"))), recursive=True)
         if len(files) == 0:
             self.images = []
             with tempfile.TemporaryDirectory() as tmpdirname:
-                filenames = glob(os.path.join(self.path + "*.fz"), recursive=True)
+                filenames = glob(os.path.join(''.join((self.path, "*.fz"))), recursive=True)
                 for filename in filenames:
                     base_filename, file_extension = os.path.splitext(
                         os.path.basename(filename)
@@ -139,20 +139,12 @@ class read_write_utils():
             hdr['OBSTYPE'] = 'READNOISE'
             hdu = fits.PrimaryHDU(data, header=hdr)
             if fpack is True:
-                filename = (
-                    os.path.join(
-                        os.path.splitext(os.path.basename(self.filename))[0],
-                    )
-                    + ".fits.fz"
-                )
+                filename = os.path.join(''.join((os.path.splitext(os.path.basename(self.filename))[0], ".fits.fz")))
                 hdu = self.pack(hdu, [f"{self.hduname}"])
             else:
                 filename = (
-                    os.path.join(
-                        os.path.splitext(os.path.basename(self.filename))[0],
-                    )
-                    + ".fits"
-                )
+                    os.path.join(''.join((os.path.splitext(os.path.basename(self.filename))[0], ".fits"))))
+            print(filename)
             hdu.writeto(filename, overwrite=True)
         elif data_type == "table":
             filename = os.path.join(self.filename, ".csv")
