@@ -86,7 +86,7 @@ This is why this method is not the default. However, the process ideally need on
 The command is formatted as follows:
 
 ```
-rts-maker <input-files-directory> --upper_quantile <float, optional> --tolerance <float, optional> --min_peak_separation <float, optional> <output-file-name-and-path, optional> rts
+rts-maker <input-files-directory> --upper_quantile <float, optional> --tolerance <float, optional> --min_peak_separation <float, optional> <output-file-path, optional> rts
 ```
 
 Understanding the options here is important. For more information please visit the [page explaining these in detail](algorithm.md), but in brief:
@@ -141,7 +141,7 @@ in `cmos-noise-map`.
 ### Running the Command
 
 ```
-rts-maker <input-files-directory> --upper_quantile <float, optional> --tolerance <float, optional> --min_peak_separation <float, optional> <output-file-name-and-path, optional> param
+rts-maker <input-files-directory> --upper_quantile <float, optional> --tolerance <float, optional> --min_peak_separation <float, optional> <output-file-path, optional> param
 ```
 
 All the parameters use are the same as the `rts` method, and parameters should be adjusted in the same way.
