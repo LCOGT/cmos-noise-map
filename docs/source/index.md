@@ -40,19 +40,19 @@ poetry install
 ## Usage
 
 ```
-Usage: rts-maker [OPTIONS] PATH FILENAME [METHOD]
+Usage: rts-maker [OPTIONS] PATH [METHOD] [FILEPATH]
 
   This script builds a noise map with the chosen method.
 
   path: Path to input without the .fits at the end
 
-  filename: Path to write file, including the filename ending in .fits
+  filepath:OPTIONAL Path to write file
 
   method: Default method is std. Available methods are std, rts, and param.
   See docs for more information about each method.
 
 Options:
-  -r, --data_ext INTEGER          Extension of fits file that contains the
+  -r, --data_ext TEXT             Extension of fits file that contains the
                                   image data
   -uq, --upper_quantile FLOAT     Standard deviation cutoff for pixel noise
                                   evaluation
@@ -64,8 +64,11 @@ Options:
                                   clusters
   -o, --out_hdu_name TEXT         Name for the header in which the data will
                                   be stored
-  -f, --fpack BOOLEAN             Adding this option will fpack your output
+  -f, --fpack                     Adding this option will fpack your output
                                   fits file
+  -b, --bias_check                Adding this option will skip the check to
+                                  see if files used are bias files  [default:
+                                  True]
   --help                          Show this message and exit.
 ```
 ## Tests

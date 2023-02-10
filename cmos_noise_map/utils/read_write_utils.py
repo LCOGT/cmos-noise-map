@@ -13,7 +13,7 @@ import pandas as pd
 import os
 import tempfile
 import re
-import sys
+import click
 
 from cmos_noise_map.utils.data_utils import check_input_data
 
@@ -22,19 +22,20 @@ class read_write_utils:
     def __init__(
         self,
         path: str,
-        filename: str,
+        filepath: str,
         data_ext=0,
         hduname: str = "READNOISE",
         fpack=True,
         method: str = "std",
+        bias_check: bool = True
     ):
         self.path = path
         self.data_ext = 0
-        self.filename = filename
+        self.filepath = filepath
         self.hduname = hduname
         self.fpack = fpack
         self.method = method
-
+        self.bias_check = bias_check
     def read_bias_frames(self):
         """
         A function to open up fits files with memory mapping.
@@ -54,6 +55,7 @@ class read_write_utils:
         """
         # Assumes trimmed and processed bias frames
         files = glob(os.path.join("".join((self.path, "*.fits"))), recursive=True)
+        
         if len(files) == 0:
             self.images = []
             with tempfile.TemporaryDirectory() as tmpdirname:
@@ -61,21 +63,48 @@ class read_write_utils:
                     os.path.join("".join((self.path, "*.fz"))), recursive=True
                 )
                 for filename in filenames:
-                    base_filename, file_extension = os.path.splitext(
-                        os.path.basename(filename)
-                    )
-                    output_filename = os.path.join(tmpdirname, base_filename)
-                    os.system("funpack -O {0} {1}".format(output_filename, filename))
-                    self.images.append(
-                        fits.open(
-                            output_filename, memmap=True, do_not_scale_image_data=True
-                        )[self.data_ext]
-                    )
+                    if self.bias_check==True:
+                        #Look for bias files
+                        obstype = fits.getval(filename, 'OBSTYPE', ext=1)#Specifically for LCO data
+                        if obstype=='BIAS':       
+                            base_filename, file_extension = os.path.splitext(
+                                os.path.basename(filename)
+                            )
+                            output_filename = os.path.join(tmpdirname, base_filename)
+                            os.system("funpack -O {0} {1}".format(output_filename, filename))
+                            self.images.append(
+                                fits.open(
+                                    output_filename, memmap=True, do_not_scale_image_data=True
+                                )[self.data_ext]
+                            )
+                    else:
+                        base_filename, file_extension = os.path.splitext(
+                            os.path.basename(filename)
+                        )
+                        output_filename = os.path.join(tmpdirname, base_filename)
+                        os.system("funpack -O {0} {1}".format(output_filename, filename))
+                        self.images.append(
+                            fits.open(
+                                output_filename, memmap=True, do_not_scale_image_data=True
+                            )[self.data_ext]
+                        )
         else:
-            self.images = [
-                fits.open(f, memmap=True, do_not_scale_image_data=True)[self.data_ext]
-                for f in files
-            ]  # Doesn't work unless not scaled
+            if self.bias_check:
+                #Look for bias files
+                bias_files = []
+                for file in files:
+                    obstype = fits.getval(file, 'OBSTYPE', ext=1)#Specifically for LCO data
+                    if obstype=='BIAS':
+                        bias_files.append(file)
+                self.images = [
+                    fits.open(f, memmap=True, do_not_scale_image_data=True)[self.data_ext]
+                    for f in bias_files
+                ]  # Doesn't work unless not scaled
+            else:
+                self.images = [
+                    fits.open(f, memmap=True, do_not_scale_image_data=True)[self.data_ext]
+                    for f in files
+                ]  # Doesn't work unless not scaled
         check_input_data(self.images, self.method)
         self.images = np.array(self.images)
         return self.images
@@ -106,7 +135,7 @@ class read_write_utils:
             hdulist = [primary_hdu, compressed_hdu]
         return fits.HDUList(hdulist)
 
-    def write_file(self, data, fpack=True, data_type="image"):
+    def write_file(self, data, fpack=True):
         """
         A function to write an output file depending on which method was used to
         generate it.
@@ -132,24 +161,24 @@ class read_write_utils:
         None.
 
         """
-        if not self.filename:
-            try:
-                header = self.images[0].header
-                basenames = re.split("-", header["ORIGNAME"])[:-2]
-                mode = header["CONFMODE"]
-                basenames.append("readnoise")
-                basenames.append(mode)
-                self.filename = "-".join(basenames)
-            except KeyError:
-                print("Unable to write default filename, please provide one")
-                sys.exit(-1)
+        data_types = {"std": "image", "rts": "image", "param": "table"}
+        data_type = data_types[self.method]
+        try:
+            header = self.images[0].header
+            basenames = re.split("-", header["ORIGNAME"])[:-2]
+            mode = header["CONFMODE"]
+            basenames.append("readnoise")
+            basenames.append(mode)
+            self.filename = "-".join(basenames)
+        except KeyError:
+            self.filename = click.prompt('Could not construct a filename, plase provide one: ', type=str, default='test')
         if data_type == "image":
             hdr = self.images[0].header
             hdr["EXTNAME"] = self.hduname
             hdr["OBSTYPE"] = "READNOISE"
             hdu = fits.PrimaryHDU(data, header=hdr)
             if fpack is True:
-                filename = os.path.join(
+                filename = os.path.join(self.filepath,
                     "".join(
                         (
                             os.path.splitext(os.path.basename(self.filename))[0],
@@ -159,7 +188,7 @@ class read_write_utils:
                 )
                 hdu = self.pack(hdu, [f"{self.hduname}"])
             else:
-                filename = os.path.join(
+                filename = os.path.join(self.filepath,
                     "".join(
                         (os.path.splitext(os.path.basename(self.filename))[0], ".fits")
                     )
@@ -167,7 +196,7 @@ class read_write_utils:
             print(filename)
             hdu.writeto(filename, overwrite=True)
         elif data_type == "table":
-            filename = os.path.join(self.filename, ".csv")
+            filename = os.path.join(self.filepath, ''.join(self.filename, ".csv"))
             means = []
             covariances = []
             num_peaks = []
