@@ -68,9 +68,9 @@ def cli(ctx: click.core.Context, **kwargs):
     """
     This script builds a noise map with the chosen method.
 
-    path: Path to input without the .fits at the end
+    path: Path to input bias files
 
-    filepath:OPTIONAL Path to write file
+    filepath:OPTIONAL Path to write file. Default writes it in the current directory.
 
     method: Default method is std. Available methods are std, rts, and param. See docs for more information about each method.
     """

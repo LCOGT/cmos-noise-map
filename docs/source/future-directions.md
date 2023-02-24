@@ -13,7 +13,3 @@ Without changing the algorithm, Python 3.10 has implemented a [match case algori
 ## Error Propagation
 There are other ways to extract the read noise from the mixture model like [in Zhang et al 2019](https://link-springer-com.proxy.library.ucsb.edu:9443/article/10.1007/s00158-019-02301-y#Sec1), which may warrant exploration if the current method is not found
 rigorous enough.
-
-## Other solutions for CMOS noise
-
-There is another type of noise (SUTR)

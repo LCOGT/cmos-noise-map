@@ -59,7 +59,7 @@ For a given sample, the likelihood that it belings to a cluster is determined by
 .. image:: https://miro.medium.com/max/712/1*cUcY9jSBHFMqCmX-fp8BvQ.jpeg
     :alt: "A visual representation of a silhouette score, a represents intra-cluster distance from the sample, and b is the inter-cluster distance."
 ```
-Where, *a* represents intra-cluster distance from the sample, and *b* is the inter-cluster distance.
+Where, *a* represents intra-cluster distance from the sample, and *b* is the inter-cluster distance. [Source: Bhardwaj, 2020](https://towardsdatascience.com/silhouette-coefficient-validating-clustering-techniques-e976bb81d10c)
 
 Then to avoid overfitting, we go through a series of checks illustrated below:
 

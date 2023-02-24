@@ -23,7 +23,8 @@ and pondered how to deal with it in the new QHY600 cameras being installed at va
 This document has information about why we chose to address the problem of RTS in the way that we did, documents the code, and contains suggestions for future directions and improvements on this work.
 
 ## Installation
-
+---
+**Note:** Some features of this package use `funpack` and `fpack`. We recommend installing these with this package to ensure everything runs smoothly.
 ### From PyPi
 
 ```
@@ -34,6 +35,7 @@ pip install cmos-noise-map
 
 ```
 cd cmos-noise-map
+pip install poetry
 poetry install
 ```
 
@@ -44,9 +46,9 @@ Usage: rts-maker [OPTIONS] PATH [METHOD] [FILEPATH]
 
   This script builds a noise map with the chosen method.
 
-  path: Path to input without the .fits at the end
+  path: Path to input bias files
 
-  filepath:OPTIONAL Path to write file
+  filepath:OPTIONAL Path to write file. Default writes it in the current directory.
 
   method: Default method is std. Available methods are std, rts, and param.
   See docs for more information about each method.
@@ -74,6 +76,7 @@ Options:
 ## Tests
 To run the unit tests, simply run:
 ```
+pip install poetry
 poetry run pytest
 ```
 
