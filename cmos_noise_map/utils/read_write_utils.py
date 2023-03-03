@@ -8,6 +8,7 @@ Created on Tue Jan 24 13:42:45 2023
 from astropy.io import fits
 from collections.abc import Iterable
 from glob import glob
+from datetime import datetime
 import numpy as np
 import pandas as pd
 import os
@@ -164,12 +165,14 @@ class read_write_utils:
         data_types = {"std": "image", "rts": "image", "param": "table"}
         data_type = data_types[self.method]
         try:
-            header = self.images[0].header
-            basenames = re.split("-", header["ORIGNAME"])[:-2]
-            mode = header["CONFMODE"]
-            basenames.append("readnoise")
-            basenames.append(mode)
-            self.filename = "-".join(basenames)
+            today_date = datetime.utcnow().strftime("%Y%m%d")
+            output_filename = "{site}{telescope}-{instrument}-{today}-readnoise-{readout_mode}.fits".format(site=self.images[0].header['SITEID'],
+                                                                                             telescope=self.images[0].header['TELESCOP'].replace("-", ""),
+                                                                                             instrument=self.images[0].header['INSTRUME'],
+                                                                                             today=today_date,
+                                                                                             readout_mode=self.images[0].header['CONFMODE'])
+
+            self.filename = output_filename
         except KeyError:
             self.filename = click.prompt('Could not construct a filename, plase provide one: ', type=str, default='test')
         if data_type == "image":
@@ -193,7 +196,6 @@ class read_write_utils:
                         (os.path.splitext(os.path.basename(self.filename))[0], ".fits")
                     )
                 )
-            print(filename)
             hdu.writeto(filename, overwrite=True)
         elif data_type == "table":
             filename = os.path.join(self.filepath, ''.join(self.filename, ".csv"))

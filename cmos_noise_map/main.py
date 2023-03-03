@@ -87,7 +87,6 @@ def cli(ctx: click.core.Context, **kwargs):
     fpack = args_dict["fpack"]
     bias_check = args_dict["bias_check"]
     
-    print(path, filepath, method)
     read_write = read_write_utils(
         path=path,
         filepath=filepath,
