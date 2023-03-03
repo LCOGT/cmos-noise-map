@@ -196,7 +196,6 @@ class read_write_utils:
                         (os.path.splitext(os.path.basename(self.filename))[0], ".fits")
                     )
                 )
-            print(filename)
             hdu.writeto(filename, overwrite=True)
         elif data_type == "table":
             filename = os.path.join(self.filepath, ''.join(self.filename, ".csv"))
