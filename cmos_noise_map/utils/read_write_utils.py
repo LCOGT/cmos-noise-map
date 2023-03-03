@@ -165,7 +165,7 @@ class read_write_utils:
         data_types = {"std": "image", "rts": "image", "param": "table"}
         data_type = data_types[self.method]
         try:
-            today_date = datetime.datetime.utcnow().strftime("%Y%m%d")
+            today_date = datetime.utcnow().strftime("%Y%m%d")
             output_filename = "{site}{telescope}-{instrument}-{today}-bpm-{readout_mode}.fits".format(site=self.images[0].header['SITEID'],
                                                                                              telescope=self.images[0].header['TELESCOP'].replace("-", ""),
                                                                                              instrument=self.images[0].header['INSTRUME'],
